@@ -21,6 +21,7 @@ module.exports = {
                     sections: [
                         {
                             name: 'Case Details',
+                            type: 'data-list',
                             fields: [
                                 {
                                     label: 'Parties',
@@ -38,6 +39,7 @@ module.exports = {
                         },
                         {
                             name: 'Representatives',
+                            type: 'data-list',
                             fields: [
                                 {
                                     label: 'Judge',
@@ -50,6 +52,15 @@ module.exports = {
                                 {
                                     label: 'Disability qualified member',
                                     value: '$.case_data.panel.disabilityQualifiedMember'
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Recent events',
+                            type: 'timeline',
+                            fields: [
+                                {
+                                    value: '$.events'
                                 }
                             ]
                         }
@@ -81,7 +92,7 @@ module.exports = {
             sections: [
                 {
                     id: 'events',
-                    name: '',
+                    name: 'Timeline',
                     type: 'timeline-panel',
                     fields: [
                         {
