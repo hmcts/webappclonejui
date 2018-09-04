@@ -7,10 +7,15 @@ import {ConfigService} from '../../config.service';
     providedIn: 'root'
 })
 export class HearingService {
+
     private messageSource = new BehaviorSubject('');
     currentMessage = this.messageSource.asObservable();
 
     constructor(private httpClient: HttpClient, private configService: ConfigService) { }
+
+    fetch(caseId): Observable<any> {
+        throw new Error('Method not implemented.');
+    }
 
     generateHearingsUrl(caseId: string) {
         return `${this.configService.config.api_base_url}/api/hearings/${caseId}`;
