@@ -29,7 +29,7 @@ export class CreateHearingComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        private hearingService: HearingService,
+        public hearingService: HearingService,
         public redirectionService: RedirectionService,
         private cdRef: ChangeDetectorRef
     ) { }

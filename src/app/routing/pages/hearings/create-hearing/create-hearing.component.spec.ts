@@ -11,7 +11,7 @@ import {HmctsModule} from '../../../../hmcts/hmcts.module';
 import {JUIFormsModule} from '../../../../forms/forms.module';
 import {DomainModule} from '../../../../domain/domain.module';
 import {HearingService} from '../../../../domain/services/hearing.service';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 
 describe('CreateHearingComponent', () => {
@@ -33,9 +33,6 @@ describe('CreateHearingComponent', () => {
                                     {value: '123'},
                                     {value: 'bob v bob'}
                                 ]
-                            },
-                            hearing: {
-                                reason: 'some reason'
                             }
                         }
                     }
@@ -111,6 +108,53 @@ describe('CreateHearingComponent', () => {
             notes.setValue('Request for a hearing to be listed');
             errors = notes.errors || {};
             expect(errors['required']).toBeFalsy();
+        });
+    });
+
+    describe('if a hearing already exists', () => {
+        beforeEach(() => {
+            activatedRouteMock.parent.snapshot.data.hearing = {
+                reason: 'doodah reason',
+            };
+            TestBed.resetTestingModule();
+            setupModule([
+                {
+                    provide: ActivatedRoute,
+                    useValue: activatedRouteMock
+                }
+            ]);
+            createComponent();
+        });
+
+        it('it should set the relist reason', () => {
+            expect(component.relistReasonText).toEqual('doodah reason');
+        });
+    });
+
+    describe('on form submission', () => {
+        it('if form is invalid then set errors', () => {
+            expect(component.error.notes).toBeFalsy();
+            component.submitCallback({});
+            expect(component.error.notes).toBeTruthy();
+        });
+
+        describe('if form is valid', () => {
+            let updateHearingSpy;
+            let redirectionServiceSpy;
+
+            beforeEach(() => {
+                updateHearingSpy = spyOn(component.hearingService, 'draftListForHearing').and.returnValue(of({}));
+                redirectionServiceSpy = spyOn(component.redirectionService, 'redirect');
+                component.form.controls['notes'].setValue('notes');
+            });
+
+            it('should save list-for-hearing in draft mode', () => {
+                component.submitCallback({
+                    notes: 'notes'
+                });
+                expect(updateHearingSpy).toHaveBeenCalledWith('1234', 'notes');
+                expect(redirectionServiceSpy).toHaveBeenCalled();
+            });
         });
     });
 });
