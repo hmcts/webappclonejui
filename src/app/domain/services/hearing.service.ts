@@ -8,21 +8,26 @@ import {ConfigService} from '../../config.service';
 })
 export class HearingService {
 
-    private messageSource = new BehaviorSubject('');
-    currentMessage = this.messageSource.asObservable();
-
     constructor(private httpClient: HttpClient, private configService: ConfigService) { }
-
-    fetch(caseId): Observable<any> {
-        throw new Error('Method not implemented.');
-    }
 
     generateHearingsUrl(caseId: string) {
         return `${this.configService.config.api_base_url}/api/hearings/${caseId}`;
     }
 
-    changeMessage(message: string) {
-        this.messageSource.next(message);
+    fetch(caseId: string): Observable<any> {
+        const url = this.generateHearingsUrl(caseId);
+        return this.httpClient.get(url);
+    }
+
+    draftListForHearing(caseId: string, relist_reason: string): Observable<any> {
+        const url = this.generateHearingsUrl(caseId);
+
+        const body = {
+            online_hearing_state: 'continuous_online_hearing_relisted_draft',
+            reason: relist_reason,
+        };
+
+        return this.httpClient.post(url, body);
     }
 
     listForHearing(caseId: string, relist_reason: string): Observable<any> {

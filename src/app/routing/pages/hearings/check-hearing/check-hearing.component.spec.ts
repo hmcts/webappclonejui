@@ -67,10 +67,8 @@ describe('CheckHearingComponent', () => {
                                 data: {
                                     caseData: {
                                         id: '1234',
-                                        decision: {
-                                            options: [
-                                                {id: 'test', name: 'test'}
-                                            ]
+                                        hearing: {
+                                            reason: 'some reason'
                                         }
                                     }
                                 }

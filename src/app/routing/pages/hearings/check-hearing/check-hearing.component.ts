@@ -12,6 +12,7 @@ import {HearingService} from '../../../../domain/services/hearing.service';
 export class CheckHearingComponent implements OnInit {
     form: FormGroup;
     case: any;
+    hearing: any;
 
     relistReasonText: string;
 
@@ -34,9 +35,12 @@ export class CheckHearingComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.eventEmitter.subscribe(this.submitCallback.bind(this));
-        this.hearingService.currentMessage.subscribe(message => this.relistReasonText = message);
         this.case = this.route.parent.snapshot.data['caseData'];
+        this.hearing = this.route.parent.snapshot.data['hearing']
+
+        if (this.hearing) {
+            this.relistReasonText = this.hearing.reason;
+        }
 
         this.createForm();
     }

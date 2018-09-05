@@ -34,10 +34,8 @@ describe('CreateHearingComponent', () => {
                                     {value: 'bob v bob'}
                                 ]
                             },
-                            decision: {
-                                options: [
-                                    {id: 'appeal-decline', name: 'Appeal Declined'}
-                                ]
+                            hearing: {
+                                reason: 'some reason'
                             }
                         }
                     }
