@@ -56,7 +56,7 @@ export class CheckHearingComponent implements OnInit {
                         this.redirectionService.redirect(`/jurisdiction/${this.case.case_jurisdiction}/casetype/${this.case.case_type_id}/viewcase/${this.case.id}/hearing/confirm`);
                     }, error => {
                         this.error = true;
-                        console.error('Something went wrong', error);
+                        console.error('Something went wrong during hearing submission', error);
                     }
                 );
         }

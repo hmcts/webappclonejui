@@ -1,10 +1,9 @@
-import {TestBed, inject} from '@angular/core/testing';
-import { HttpClientModule} from '@angular/common/http';
+import {TestBed, async, inject} from '@angular/core/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SharedModule} from '../../shared/shared.module';
 import {BrowserTransferStateModule} from '@angular/platform-browser';
 import {DomainModule} from '../domain.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {HearingService} from './hearing.service';
 import {ConfigService} from '../../config.service';
 
@@ -21,16 +20,13 @@ describe('HearingService', () => {
                 DomainModule,
                 SharedModule,
                 BrowserTransferStateModule,
-                HttpClientModule,
                 HttpClientTestingModule,
                 RouterTestingModule
             ],
             providers: [
-                HearingService,
                 {
-                    provide: ConfigService,
-                    userValue: configMock
-                }
+                    provide: ConfigService, userValue: configMock
+                },
             ]
         }));
     });
@@ -38,4 +34,18 @@ describe('HearingService', () => {
     it('should be created', inject([HearingService], (service: HearingService) => {
         expect(service).toBeTruthy();
     }));
+
+    describe('HTTP requests', () => {
+        const fetchResult = { online_hearing_state: 'continuous_online_hearing_relisted_draft', reason: 'test' };
+
+        it('should return hearing', async(inject([HearingService, HttpTestingController],
+            (service: HearingService, backend: HttpTestingController) => {
+
+                service.fetch('1221').subscribe(value => {
+                    expect(value).toEqual(fetchResult);
+                });
+
+                backend.expectOne('/blah').flush(fetchResult, { status: 200, statusText: 'Ok' });
+            })));
+    });
 });

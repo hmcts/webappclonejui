@@ -16,7 +16,6 @@ import {RedirectionService} from '../../../redirection.service';
 
 class MockHearingService {
     isError = false;
-    currentMessage = of({});
 
     listForHearing(caseId: string, relist_reason: string): Observable<any> {
         if (this.isError) {

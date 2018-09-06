@@ -15,7 +15,7 @@ export class HearingService {
     }
 
     fetch(caseId: string): Observable<any> {
-        const url = this.generateHearingsUrl(caseId);
+        const url = '/blah';// this.generateHearingsUrl(caseId);
         return this.httpClient.get(url);
     }
 
@@ -24,7 +24,7 @@ export class HearingService {
 
         const body = {
             online_hearing_state: 'continuous_online_hearing_relisted_draft',
-            reason: relist_reason,
+            reason: relist_reason
         };
 
         return this.httpClient.post(url, body);
@@ -35,7 +35,7 @@ export class HearingService {
 
         const body = {
             online_hearing_state: 'continuous_online_hearing_relisted',
-            reason: relist_reason,
+            reason: relist_reason
         };
 
         return this.httpClient.post(url, body);
