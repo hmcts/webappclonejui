@@ -1,21 +1,29 @@
-import {TestBed, async, inject} from '@angular/core/testing';
-import {RouterTestingModule} from '@angular/router/testing';
-import {SharedModule} from '../../shared/shared.module';
-import {BrowserTransferStateModule} from '@angular/platform-browser';
-import {DomainModule} from '../domain.module';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {HearingService} from './hearing.service';
-import {ConfigService} from '../../config.service';
+import { TestBed } from '@angular/core/testing';
+
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { ConfigService } from '../../config.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DomainModule } from '../domain.module';
+import { SharedModule } from '../../shared/shared.module';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
+import { HearingService } from './hearing.service';
 
 const configMock = {
     config: {
-        api_base_url: 'http://test-doodah/api/hearings/'
+        api_base_url: ''
     }
 };
 
 describe('HearingService', () => {
+    let hearingService: HearingService;
+    let httpMock: HttpTestingController;
+
+    const fetchResult = { online_hearing_state: 'continuous_online_hearing_relisted_draft', reason: 'test' };
+    const caseId = '123';
+    let url;
+
     beforeEach(() => {
-        TestBed.configureTestingModule(({
+        TestBed.configureTestingModule({
             imports: [
                 DomainModule,
                 SharedModule,
@@ -24,55 +32,54 @@ describe('HearingService', () => {
                 RouterTestingModule
             ],
             providers: [
+                HearingService,
                 {
-                    provide: ConfigService, userValue: configMock
-                },
+                    provide: ConfigService,
+                    useValue: configMock
+                }
             ]
-        }));
+        });
+        hearingService = TestBed.get(HearingService);
+        httpMock = TestBed.get(HttpTestingController);
+        url = hearingService.generateHearingsUrl(caseId);
     });
 
-    it('should be created', inject([HearingService], (service: HearingService) => {
-        expect(service).toBeTruthy();
-    }));
+    it('should be created', () => {
+        expect(hearingService).toBeTruthy();
+    });
 
-    describe('HTTP requests', () => {
-        const fetchResult = { online_hearing_state: 'continuous_online_hearing_relisted_draft', reason: 'test' };
+    it('should return hearing', () => {
+        hearingService.fetch(caseId).subscribe(value => {
+            expect(value).toEqual(fetchResult);
+        });
 
-        it('should return hearing', async(inject([HearingService, HttpTestingController],
-            (service: HearingService, backend: HttpTestingController) => {
-            service.fetch('1221').subscribe(value => {
-                expect(value).toEqual(fetchResult);
-            });
+        httpMock.expectOne(url).flush(fetchResult, { status: 200, statusText: 'Ok' });
+    });
 
-            backend.expectOne('/blah').flush(fetchResult, { status: 200, statusText: 'Ok' });
-    })));
+    it('should save list-for-hearing in draft mode', () => {
+        hearingService.draftListForHearing(caseId, fetchResult.reason).subscribe();
 
-        it('should save list-for-hearing in draft mode', async(inject([HearingService, HttpTestingController],
-            (service: HearingService, backend: HttpTestingController) => {
-            service.draftListForHearing('1234', fetchResult.reason).subscribe();
-
-            const httpMock = backend.expectOne(req => {
+        httpMock.expectOne(req => {
                 const body = req.body;
 
                 return req.method === 'POST'
-                    && req.url === '/blah'
+                    && req.url === url
                     && body.online_hearing_state === fetchResult.online_hearing_state
                     && body.reason === fetchResult.reason;
             });
-        })));
-
-        it('should save list-for-hearing', async(inject([HearingService, HttpTestingController],
-            (service: HearingService, backend: HttpTestingController) => {
-                service.listForHearing('1234', fetchResult.reason).subscribe();
-
-                const httpMock = backend.expectOne(req => {
-                    const body = req.body;
-
-                    return req.method === 'POST'
-                        && req.url === '/blah'
-                        && body.online_hearing_state === 'continuous_online_hearing_relisted'
-                        && body.reason === fetchResult.reason;
-                });
-            })));
     });
+
+    it('should save list-for-hearing', () => {
+        hearingService.listForHearing(caseId, fetchResult.reason).subscribe();
+
+        httpMock.expectOne(req => {
+            const body = req.body;
+
+            return req.method === 'POST'
+                && req.url === url
+                && body.online_hearing_state === 'continuous_online_hearing_relisted'
+                && body.reason === fetchResult.reason;
+        });
+    });
+
 });

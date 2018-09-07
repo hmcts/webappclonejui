@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '../../config.service';
 
@@ -15,12 +15,12 @@ export class HearingService {
     }
 
     fetch(caseId: string): Observable<any> {
-        const url = '/blah';// this.generateHearingsUrl(caseId);
+        const url = this.generateHearingsUrl(caseId);
         return this.httpClient.get(url);
     }
 
     draftListForHearing(caseId: string, relist_reason: string): Observable<any> {
-        const url = '/blah';// this.generateHearingsUrl(caseId);
+        const url = this.generateHearingsUrl(caseId);
 
         const body = {
             online_hearing_state: 'continuous_online_hearing_relisted_draft',
@@ -31,7 +31,7 @@ export class HearingService {
     }
 
     listForHearing(caseId: string, relist_reason: string): Observable<any> {
-        const url = '/blah';//this.generateHearingsUrl(caseId);
+        const url = this.generateHearingsUrl(caseId);
 
         const body = {
             online_hearing_state: 'continuous_online_hearing_relisted',
