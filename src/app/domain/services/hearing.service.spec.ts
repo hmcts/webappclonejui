@@ -40,12 +40,25 @@ describe('HearingService', () => {
 
         it('should return hearing', async(inject([HearingService, HttpTestingController],
             (service: HearingService, backend: HttpTestingController) => {
+            service.fetch('1221').subscribe(value => {
+                expect(value).toEqual(fetchResult);
+            });
 
-                service.fetch('1221').subscribe(value => {
-                    expect(value).toEqual(fetchResult);
-                });
+            backend.expectOne('/blah').flush(fetchResult, { status: 200, statusText: 'Ok' });
+    })));
 
-                backend.expectOne('/blah').flush(fetchResult, { status: 200, statusText: 'Ok' });
-            })));
+        it('should save list-for-hearing in draft mode', async(inject([HearingService, HttpTestingController],
+            (service: HearingService, backend: HttpTestingController) => {
+            service.draftListForHearing('1234', 'some reason').subscribe();
+
+            const httpMock = backend.expectOne(req => {
+                const body = req.body;
+
+                return req.method === 'POST'
+                    && req.url === '/blah'
+                    && body.online_hearing_state === 'continuous_online_hearing_relisted_draft'
+                    && body.reason === body.reason;
+            });
+        })));
     });
 });

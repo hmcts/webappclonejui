@@ -20,7 +20,7 @@ export class HearingService {
     }
 
     draftListForHearing(caseId: string, relist_reason: string): Observable<any> {
-        const url = this.generateHearingsUrl(caseId);
+        const url = '/blah';// this.generateHearingsUrl(caseId);
 
         const body = {
             online_hearing_state: 'continuous_online_hearing_relisted_draft',
