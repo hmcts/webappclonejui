@@ -145,6 +145,7 @@ const routes: Routes = [
     providers: [
         CaseResolve,
         DecisionResolve,
+        HearingResolve,
         RedirectionService
     ],
     exports: [
