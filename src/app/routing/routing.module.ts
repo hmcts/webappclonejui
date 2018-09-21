@@ -31,7 +31,9 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { DemoComponent } from './pages/demo/demo.component';
 import { GovukModule } from '../govuk/govuk.module';
 import { HmctsModule } from '../hmcts/hmcts.module';
+import { ReasonsCoNotApprovedComponent } from './pages/decisions/fr/reasons-co-not-approved/reasons-co-not-approved.component';
 import { MakeDecisionComponent } from './pages/decisions/fr/make-decision/make-decision.component';
+import { DecisionNotesComponent } from './pages/decisions/fr/decision-notes/decision-notes.component';
 
 const routes: Routes = [
     {
@@ -64,6 +66,9 @@ const routes: Routes = [
             {
                 path: 'decision', component: DecisionRootComponent, resolve: {decision: DecisionResolve}, children: [
                     {path: 'create', component: MakeDecisionComponent},
+                    {path: 'reject-reasons/:draft', component: MakeDecisionComponent},
+                    {path: 'reject-reasons', component: ReasonsCoNotApprovedComponent},
+                    {path: 'decision-notes', component: DecisionNotesComponent},
                     {path: 'check', component: CheckDecisionComponent},
                     {path: 'confirm', component: DecisionConfirmationComponent}
                 ]
@@ -149,7 +154,9 @@ const routes: Routes = [
         CheckHearingComponent,
         HearingConfirmationComponent,
         DemoComponent,
-        MakeDecisionComponent
+        ReasonsCoNotApprovedComponent,
+        MakeDecisionComponent,
+        DecisionNotesComponent
     ],
     providers: [
         CaseResolve,

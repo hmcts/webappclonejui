@@ -2,7 +2,7 @@ import {Component, OnInit, Inject, EventEmitter, ChangeDetectorRef} from '@angul
 import {ActivatedRoute, Router} from '@angular/router';
 import {DecisionService} from '../../../../domain/services/decision.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { RedirectionService } from '../../../../routing/redirection.service';
+import { RedirectionService } from '../../../redirection.service';
 
 @Component({
     selector: 'app-decision-make',

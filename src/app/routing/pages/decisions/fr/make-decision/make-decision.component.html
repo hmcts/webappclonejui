@@ -1,31 +1,26 @@
 <app-govuk-back-link></app-govuk-back-link>
-<div class="govuk-form-group">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <fieldset class="govuk-fieldset" attr.aria-describedby="{{idPrefix + '-hint'}}">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                <h1 class="govuk-fieldset__heading">{{ fieldset.legend.text}}</h1>
-            </legend>
-            <span id="{{idPrefix + '-hint'}}" class="govuk-hint">{{hint.text}}</span>
-            <div class="govuk-checkboxes">
-                <div class="govuk-checkboxes__item" *ngFor="let item of checkboxes; let i = index">
-                    <input class="govuk-checkboxes__input" id="{{idPrefix + '-' + (i+1)}}" name="{{name}}" type="checkbox" value="{{item.value}}">
-                    <label class="govuk-label govuk-checkboxes__label" for="{{idPrefix + '-' + (i+1)}}">
-                        {{item.text}}
-                    </label>
-                    <div *ngIf="item.sub">
-                        <div  ng-switch="Object.keys(item.sub)">
-                            <div ng-switch-when="legend">
-                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                                    <h1 class="govuk-fieldset__heading">{{ item.sub.legend }}</h1>
-                                </legend>
-                            </div>
-                            <div ng-switch-when="checkboxes">
-                                <app-checkbox [items]="item.sub.checkboxes"></app-checkbox>
+<main class="govuk-main-wrapper" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form [formGroup]="formDraft" (ngSubmit)="onSubmit()">
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                            <h1 class="govuk-fieldset__heading">Do you want to approve the draft consent order?</h1>
+                        </legend>
+                        <div class="govuk-radios govuk-radios--inline">
+                            <div class="govuk-radios__item" *ngFor="let item of items; let i = index;">
+                                <input class="govuk-radios__input" id="{{idPrefix + '-' + (i+1) }}" name="{{name}}" type="radio" value="{{item.value}}" formControlName="radioButtons">
+                                <label class="govuk-label govuk-radios__label" for="{{idPrefix + '-' + (i+1) }}">
+                                    {{item.text}}
+                                </label>
                             </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
-            </div>
-        </fieldset>
-    </form>
-</div>
+                <button class="govuk-button" type="submit">Continue</button>
+            </form>
+        </div>
+    </div>
+</main>
+
