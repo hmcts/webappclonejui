@@ -28,9 +28,10 @@ import { JUIFormsModule } from '../forms/forms.module';
 import { TermsAndConditionsComponent } from './pages/terms-and-conditions/terms-and-conditions.component';
 import { CookiesComponent } from './pages/cookies/cookies.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
-import {DemoComponent} from './pages/demo/demo.component';
-import {GovukModule} from '../govuk/govuk.module';
-import {HmctsModule} from '../hmcts/hmcts.module';
+import { DemoComponent } from './pages/demo/demo.component';
+import { GovukModule } from '../govuk/govuk.module';
+import { HmctsModule } from '../hmcts/hmcts.module';
+import { MakeDecisionComponent } from './pages/decisions/fr/make-decision/make-decision.component';
 
 const routes: Routes = [
     {
@@ -62,11 +63,19 @@ const routes: Routes = [
         children: [
             {
                 path: 'decision', component: DecisionRootComponent, resolve: {decision: DecisionResolve}, children: [
-                    {path: 'create', component: CreateDecisionComponent},
+                    {path: 'create', component: MakeDecisionComponent},
                     {path: 'check', component: CheckDecisionComponent},
                     {path: 'confirm', component: DecisionConfirmationComponent}
                 ]
             },
+            // {
+            //     path: 'decision', component: DecisionRootComponent, resolve: {decision: DecisionResolve}, children: [
+            //         {path: 'create', component: CreateDecisionComponent},
+            //         {path: 'create/:state', component: CreateDecisionComponent},
+            //         {path: 'check', component: CheckDecisionComponent},
+            //         {path: 'confirm', component: DecisionConfirmationComponent}
+            //     ]
+            // },
             {
                     path: 'hearing', component: HearingRootComponent, children: [
                     {path: 'list', component: CreateHearingComponent},
@@ -139,7 +148,8 @@ const routes: Routes = [
         CreateHearingComponent,
         CheckHearingComponent,
         HearingConfirmationComponent,
-        DemoComponent
+        DemoComponent,
+        MakeDecisionComponent
     ],
     providers: [
         CaseResolve,

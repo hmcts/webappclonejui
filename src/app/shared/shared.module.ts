@@ -15,6 +15,7 @@ import {QuestionListComponent} from './components/question-list/question-list.co
 import {QuestionComponent} from './components/question/question.component';
 import {ReversePipe} from './pipes/array-reverse/reverse.pipe';
 import { TabsComponent } from './components/tabs/tabs.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { TabsComponent } from './components/tabs/tabs.component';
         QuestionListComponent,
         QuestionComponent,
         ReversePipe,
-        TabsComponent
+        TabsComponent,
+        CheckboxComponent
     ],
     exports: [
         TableComponent,
@@ -45,7 +47,8 @@ import { TabsComponent } from './components/tabs/tabs.component';
         QuestionListComponent,
         QuestionComponent,
         ReversePipe,
-        TabsComponent
+        TabsComponent,
+        CheckboxComponent
     ]
 })
 
