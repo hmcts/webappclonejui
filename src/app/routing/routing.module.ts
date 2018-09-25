@@ -68,7 +68,6 @@ const routes: Routes = [
             {
                 path: 'decision', component: DecisionRootComponent, resolve: {decision: DecisionResolve}, children: [
                     {path: 'create', component: MakeDecisionComponent},
-                    {path: 'reject-reasons', component: MakeDecisionComponent},
                     {path: 'reject-reasons', component: ReasonsCoNotApprovedComponent},
                     {path: 'notes-for-court-administrator', component: NotesForCourtAdministratorComponent},
                     {path: 'draft-consent-order', component: DraftConsentOrderComponent},

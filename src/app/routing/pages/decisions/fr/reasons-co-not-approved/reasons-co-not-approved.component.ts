@@ -13,8 +13,8 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
     decision: any;
     options = [];
     Object = Object;
-    @Input() idPrefix = 'waste';
-    @Input() name = 'waste';
+    @Input() idPrefix = 'reject';
+    @Input() name = 'reject';
     @Input() fieldset = {
         legend: {
             text: 'Reasons the consent order was not approved',
