@@ -13,6 +13,7 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
     decision: any;
     options = [];
     Object = Object;
+    FormControls = {};
     @Input() idPrefix = 'reject';
     @Input() name = 'reject';
     @Input() fieldset = {
@@ -28,68 +29,72 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
 
     @Input() checkboxes = [
         {
-            value: 'reject',
+            value: 'partiesNeedAttend',
             text: 'The parties need to attend a hearing'
         },
         {
-            value: 'reject',
+            value: 'NotEnoughInformation',
             text: 'Not enough information was supplied to decide if the order is fair',
             sub: {
                 legend: 'Information required',
                 checkboxes: [
                     {
-                        value: 'rejectsub',
+                        value: 'capitalPositions',
                         text: 'The parties’ capital positions if the order were to take effect'
                     },
                     {
-                        value: 'rejectsub',
+                        value: 'partiesHousingNeeds',
                         text: 'The parties’ housing needs and whether they are met by the order'
                     },
                     {
-                        value: 'rejectsub',
+                        value: 'justificationDeparture',
                         text: 'The justification for departure from equality of capital'
                     },
                     {
-                        value: 'rejectsub',
+                        value: 'partiesPensionProvision',
                         text: 'The parties’ pension provision if the order were to take effect'
                     },
                     {
-                        value: 'rejectsub',
+                        value: 'childrensHousingNeeds',
                         text: 'The children’s housing needs and whether they are met by the order'
                     },
                     {
-                        value: 'rejectsub',
+                        value: 'netEffectOrder',
                         text: 'The net effect of the order'
                     },
                     {
-                        value: 'rejectsub',
+                        value: 'Other',
                         text: 'Other',
                         sub: {
                             legend: 'What information is needed?',
-                            textarea: 'skdjfksjdfh'
+                            textarea: ''
                         }
                     }
                 ]
             }
         },
         {
-            value: 'reject',
+            value: 'd81',
             text: 'The D81 form is incomplete'
         },
         {
-            value: 'reject',
+            value: 'pensionAnnex',
+            text: 'The pension annex was not attached'
+        },
+        {
+            value: 'applicantTakenAdvice',
             text: 'It’s not clear if the applicant has taken independent legal advice'
         },
         {
-            value: 'reject',
+            value: 'respondentTakenAdvice',
             text: 'It’s not clear if the respondent has taken independent legal advice'
         },
         {
-            value: 'reject',
+            value: 'Other',
             text: 'Other',
             sub: {
                 legend: 'Reason',
-                textarea: 'Some text here'
+                textarea: ''
             }
         }
     ];
@@ -97,9 +102,11 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
     constructor( private route: ActivatedRoute,
                  private router: Router ) {}
     ngOnInit() {
-        this.rejectReasonsForm = new FormGroup ({
-           // radioButtons: new FormControl ('no')
-        });
+        for (let item of this.checkboxes) {
+            this.FormControls[item.value] = new FormControl ();
+        }
+        this.rejectReasonsForm = new FormGroup (this.FormControls);
+
         this.case = this.route.parent.snapshot.data['caseData'];
         console.log(this.case);
 

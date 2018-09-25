@@ -17,7 +17,7 @@
                             <ng-container  *ngFor="let item of checkboxes; let i = index">
 
                                 <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="{{idPrefix + '-' + (i+1)}}" name="{{idPrefix + '-' + (i+1)}}" type="checkbox" formControlName="gender"">
+                                    <input class="govuk-checkboxes__input" id="{{idPrefix + '-' + (i+1)}}" name="{{idPrefix + '-' + (i+1)}}" type="checkbox" formControlName="{{item.value}}">
                                     <label class="govuk-label govuk-checkboxes__label" for="{{idPrefix + '-' + (i+1)}}">
                                         {{item.text}}
                                     </label>
