@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-reasons-co-not-approved',
@@ -8,6 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class ReasonsCoNotApprovedComponent implements OnInit {
     @Input() case;
+    rejectReasonsForm: any;
     decision: any;
     options = [];
     Object = Object;
@@ -27,7 +29,11 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
     @Input() checkboxes = [
         {
             value: 'reject',
-            text: 'The parties need to attend a hearing',
+            text: 'The parties need to attend a hearing'
+        },
+        {
+            value: 'reject',
+            text: 'Not enough information was supplied to decide if the order is fair',
             sub: {
                 legend: 'Information required',
                 checkboxes: [
@@ -68,10 +74,6 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
         },
         {
             value: 'reject',
-            text: 'Not enough information was supplied to decide if the order is fair'
-        },
-        {
-            value: 'reject',
             text: 'The D81 form is incomplete'
         },
         {
@@ -86,7 +88,7 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
             value: 'reject',
             text: 'Other',
             sub: {
-                legend: 'What information is needed?',
+                legend: 'Reason',
                 textarea: 'Some text here'
             }
         }
@@ -95,6 +97,9 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
     constructor( private route: ActivatedRoute,
                  private router: Router ) {}
     ngOnInit() {
+        this.rejectReasonsForm = new FormGroup ({
+           // radioButtons: new FormControl ('no')
+        });
         this.case = this.route.parent.snapshot.data['caseData'];
         console.log(this.case);
 

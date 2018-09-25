@@ -33,7 +33,9 @@ import { GovukModule } from '../govuk/govuk.module';
 import { HmctsModule } from '../hmcts/hmcts.module';
 import { ReasonsCoNotApprovedComponent } from './pages/decisions/fr/reasons-co-not-approved/reasons-co-not-approved.component';
 import { MakeDecisionComponent } from './pages/decisions/fr/make-decision/make-decision.component';
-import { DecisionNotesComponent } from './pages/decisions/fr/decision-notes/decision-notes.component';
+import { NotesForCourtAdministratorComponent } from './pages/decisions/fr/notes-for-court-administrator/notes-for-court-administrator.component';
+import { DraftConsentOrderComponent } from './pages/decisions/fr/draft-consent-order/draft-consent-order.component';
+import { HearingDetailsComponent } from './pages/decisions/fr/hearing-details/hearing-details.component';
 
 const routes: Routes = [
     {
@@ -66,9 +68,11 @@ const routes: Routes = [
             {
                 path: 'decision', component: DecisionRootComponent, resolve: {decision: DecisionResolve}, children: [
                     {path: 'create', component: MakeDecisionComponent},
-                    {path: 'reject-reasons/:draft', component: MakeDecisionComponent},
+                    {path: 'reject-reasons', component: MakeDecisionComponent},
                     {path: 'reject-reasons', component: ReasonsCoNotApprovedComponent},
-                    {path: 'decision-notes', component: DecisionNotesComponent},
+                    {path: 'notes-for-court-administrator', component: NotesForCourtAdministratorComponent},
+                    {path: 'draft-consent-order', component: DraftConsentOrderComponent},
+                    {path: 'app-hearing-details', component: HearingDetailsComponent},
                     {path: 'check', component: CheckDecisionComponent},
                     {path: 'confirm', component: DecisionConfirmationComponent}
                 ]
@@ -156,7 +160,9 @@ const routes: Routes = [
         DemoComponent,
         ReasonsCoNotApprovedComponent,
         MakeDecisionComponent,
-        DecisionNotesComponent
+        DraftConsentOrderComponent,
+        NotesForCourtAdministratorComponent,
+        HearingDetailsComponent
     ],
     providers: [
         CaseResolve,

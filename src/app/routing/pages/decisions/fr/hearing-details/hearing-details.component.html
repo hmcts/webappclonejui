@@ -1,0 +1,153 @@
+<main class="govuk-main-wrapper" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Hearing details</h1>
+
+            <form [formGroup]="hearingDetailsForm" (ngSubmit)="onSubmit()">
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-label--m" for="estimateLengthOfHearing">
+                        Estimate length of hearing in minutes
+                    </label>
+                    <input class="govuk-input govuk-input--width-3" id="estimateLengthOfHearing"
+                           name="estimateLengthOfHearing" type="text">
+                </div>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-label--m" for="estimateLengthOfHearing">
+                        When should the hearing take place?
+                    </label>
+                    <input class="govuk-input" id="estimateLengthOfHearing" name="estimateLengthOfHearing" type="text">
+                </div>
+
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            Should this case be reserved for you?
+                        </legend>
+                        <div class="govuk-radios" data-module="radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="doYouNeedToHearTheCase-1"
+                                       name="doYouNeedToHearTheCase" type="radio" value="Yes, I need to hear the case">
+                                <label class="govuk-label govuk-radios__label" for="doYouNeedToHearTheCase-1">
+                                    Yes<span class="govuk-visually-hidden">, I need to hear the case</span>
+                                </label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="doYouNeedToHearTheCase-2"
+                                       name="doYouNeedToHearTheCase" type="radio"
+                                       value="No, any judge can hear the case"
+                                       aria-controls="conditional-doYouNeedToHearTheCase-2" aria-expanded="false">
+                                <label class="govuk-label govuk-radios__label" for="doYouNeedToHearTheCase-2">
+                                    No<span class="govuk-visually-hidden">, any judge can hear the case</span>
+                                </label>
+                            </div>
+                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                 id="conditional-doYouNeedToHearTheCase-2">
+                                <div class="govuk-form-group">
+                                    <fieldset class="govuk-fieldset">
+                                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                            Do you need to transfer to another court for listings and directions?
+                                        </legend>
+                                        <div class="govuk-radios" data-module="radios">
+                                            <div class="govuk-radios__item">
+                                                <input class="govuk-radios__input" id="transferCourt-1"
+                                                       name="transferCourt" type="radio"
+                                                       value="Yes, I need to transfer to another court for listings and directions"
+                                                       aria-controls="conditional-transferCourt-1"
+                                                       aria-expanded="false">
+                                                <label class="govuk-label govuk-radios__label" for="transferCourt-1">
+                                                    Yes<span class="govuk-visually-hidden">, I need to transfer to another court for listings and directions</span>
+                                                </label>
+                                            </div>
+                                            <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+                                                 id="conditional-transferCourt-1">
+                                                <div class="govuk-form-group">
+                                                    <fieldset class="govuk-fieldset">
+                                                        <legend
+                                                            class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                                            Whose court?
+                                                        </legend>
+                                                        <div class="govuk-radios">
+                                                            <div class="govuk-radios__item">
+                                                                <input class="govuk-radios__input" id="whoseCourt-1"
+                                                                       name="whoseCourt" type="radio" value="Applicant">
+                                                                <label class="govuk-label govuk-radios__label"
+                                                                       for="whoseCourt-1">
+                                                                    Applicant
+                                                                </label>
+                                                            </div>
+                                                            <div class="govuk-radios__item">
+                                                                <input class="govuk-radios__input" id="whoseCourt-2"
+                                                                       name="whoseCourt" type="radio"
+                                                                       value="Respondent">
+                                                                <label class="govuk-label govuk-radios__label"
+                                                                       for="whoseCourt-2">
+                                                                    Respondent
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+
+                                                <div class="govuk-form-group">
+                                                    <fieldset class="govuk-fieldset">
+                                                        <legend
+                                                            class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                                            What do you need to transfer?
+                                                        </legend>
+                                                        <div class="govuk-radios">
+                                                            <div class="govuk-radios__item">
+                                                                <input class="govuk-radios__input"
+                                                                       id="whatDoYouNeedToTransfer-1"
+                                                                       name="whatDoYouNeedToTransfer" type="radio"
+                                                                       value="Financial remedy case only">
+                                                                <label class="govuk-label govuk-radios__label"
+                                                                       for="whatDoYouNeedToTransfer-1">
+                                                                    Financial remedy case only
+                                                                </label>
+                                                            </div>
+                                                            <div class="govuk-radios__item">
+                                                                <input class="govuk-radios__input"
+                                                                       id="whatDoYouNeedToTransfer-2"
+                                                                       name="whatDoYouNeedToTransfer" type="radio"
+                                                                       value="Entire case including divorce and financial remedy">
+                                                                <label class="govuk-label govuk-radios__label"
+                                                                       for="whatDoYouNeedToTransfer-2">
+                                                                    Entire case including divorce and financial remedy
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div class="govuk-radios__item">
+                                                <input class="govuk-radios__input" id="transferCourt-2"
+                                                       name="transferCourt" type="radio"
+                                                       value="No, I don’t need to transfer to another court for listings and directions">
+                                                <label class="govuk-label govuk-radios__label" for="transferCourt-2">
+                                                    No<span class="govuk-visually-hidden">, I don’t need to transfer to another court for listings and directions</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-label--m" for="reason">
+                        Any other hearing details
+                    </label>
+                    <textarea class="govuk-textarea" id="reason" name="reason" rows="5"></textarea>
+                </div>
+                <button type="submit" class="govuk-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</main>

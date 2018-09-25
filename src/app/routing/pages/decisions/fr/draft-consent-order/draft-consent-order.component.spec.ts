@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DecisionNotesComponent } from './decision-notes.component';
+import { DraftConsentOrderComponent } from './draft-consent-order.component';
 
-describe('DecisionNotesComponent', () => {
-  let component: DecisionNotesComponent;
-  let fixture: ComponentFixture<DecisionNotesComponent>;
+describe('DraftConsentOrderComponent', () => {
+  let component: DraftConsentOrderComponent;
+  let fixture: ComponentFixture<DraftConsentOrderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DecisionNotesComponent ]
+      declarations: [ DraftConsentOrderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DecisionNotesComponent);
+    fixture = TestBed.createComponent(DraftConsentOrderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

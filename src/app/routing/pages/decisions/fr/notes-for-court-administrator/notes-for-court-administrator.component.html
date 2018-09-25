@@ -1,0 +1,22 @@
+<app-govuk-back-link></app-govuk-back-link>
+<main class="govuk-main-wrapper" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form [formGroup]="notesForCourtAdminForm" (ngSubmit)="onSubmit()">
+                <div class="govuk-form-group">
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--xl" for="notes-for-court-administrator">
+                            Notes for court administrator (optional)
+                        </label>
+                    </h1>
+                    <span id="copyconsentorder-hint" class="govuk-hint">
+                        This won’t be seen by the parties.
+                    </span>
+                    <textarea class="govuk-textarea" id="directions" name="directions" rows="5"></textarea>
+                </div>
+                <button class="govuk-button" type="submit">Continue</button>
+            </form>
+        </div>
+    </div>
+</main>
+
