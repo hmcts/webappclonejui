@@ -3,6 +3,8 @@ const moment = require('moment');
 const config = require('../../config');
 const generateRequest = require('../lib/request');
 const mockRequest = require('../lib/mockRequest');
+const getEventTemplate = require('./templates');
+const valueProcessor = require('../lib/processors/value-processor');
 
 // TODO move [postHearing, getHearingId, getOnlineHearingConversation] to COH microserivce Module
 function postHearing(caseId, userId, options, jurisdictionId = 'SSCS') {
@@ -49,14 +51,24 @@ function convertDateTime(dateObj) {
 /// CCD EVENT Data
 //////////////////////////
 
-function reduceCcdEvents(events) {
+function reduceCcdEvents(events, caseId, jurisdiction, caseType) {
     return events.map(event => {
         const dateObj = convertDateTime(event.created_date);
         const dateUtc = dateObj.dateUtc;
         const date = dateObj.date;
         const time = dateObj.time;
 
-        const documents = [];
+
+
+        valueProcessor(getEventTemplate(jurisdiction, caseType), event);
+
+        const documents = event.documents.map(doc => {
+            return ({
+                name: `${doc.document_filename}`,
+                href: `/jurisdiction/${jurisdiction}/casetype/${caseType}/viewcase/${caseId}/casefile/${doc.id}`
+            });
+        });
+
 
         return {
             title: event.event_name,
@@ -75,7 +87,7 @@ function getCcdEventsRaw(caseId, userId, jurisdiction, caseType, options) {
 }
 
 function getCcdEvents(caseId, userId, jurisdiction, caseType, options) {
-    return getCcdEventsRaw(caseId, userId, jurisdiction, caseType, options).then(reduceCcdEvents);
+    return getCcdEventsRaw(caseId, userId, jurisdiction, caseType, options).then(events => reduceCcdEvents(events, caseId, jurisdiction, caseType));
 }
 
 //////////////////////////
