@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {FormGroup} from '@angular/forms';
 
 @Component({
     selector: 'app-checkbox',
@@ -6,34 +7,10 @@ import {Component, Input} from '@angular/core';
     styleUrls: ['./checkbox.component.scss']
 })
 export class CheckboxComponent {
-
+    @Input() group: FormGroup;
     @Input() idPrefix = 'waste';
     @Input() name = 'waste';
-    @Input() fieldset = {
-        legend: {
-            text: 'Which types of waste do you transport?',
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--xl'
-        }
-    };
-    @Input() hint = {
-        text: 'Select all that apply.'
-    };
     @Input() items;
-    // @Input() items = [
-    //     {
-    //         value: 'carcasses',
-    //         text: 'Waste from animal carcasses'
-    //     },
-    //     {
-    //         value: 'mines',
-    //         text: 'Waste from mines or quarries'
-    //     },
-    //     {
-    //         value: 'farm',
-    //         text: 'Farm or agricultural waste'
-    //     }
-    // ];
 
     constructor() { }
 

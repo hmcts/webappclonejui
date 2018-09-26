@@ -63,10 +63,11 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
                         text: 'The net effect of the order'
                     },
                     {
-                        value: 'Other',
+                        value: 'Other1',
                         text: 'Other',
                         sub: {
                             legend: 'What information is needed?',
+                            value: 'informationNeeded',
                             textarea: ''
                         }
                     }
@@ -90,10 +91,11 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
             text: 'It’s not clear if the respondent has taken independent legal advice'
         },
         {
-            value: 'Other',
+            value: 'Other2',
             text: 'Other',
             sub: {
                 legend: 'Reason',
+                value: 'Reason',
                 textarea: ''
             }
         }
@@ -102,9 +104,19 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
     constructor( private route: ActivatedRoute,
                  private router: Router ) {}
     ngOnInit() {
-        for (let item of this.checkboxes) {
+        for (const item of this.checkboxes) {
             this.FormControls[item.value] = new FormControl ();
+            if (item.sub) {
+                if (item.sub.checkboxes) {
+                    for (const subitem of item.sub.checkboxes) {
+                        this.FormControls[subitem.value] = new FormControl();
+                    }
+                }
+            }
         }
+
+        console.log(this.FormControls);
+
         this.rejectReasonsForm = new FormGroup (this.FormControls);
 
         this.case = this.route.parent.snapshot.data['caseData'];
@@ -113,5 +125,8 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
         this.decision = this.route.parent.snapshot.data['decision'];
         console.log(this.decision);
         this.options = this.case.decision.options;
+    }
+    onSubmit() {
+        console.log("Submit=>", this.rejectReasonsForm);
     }
 }
