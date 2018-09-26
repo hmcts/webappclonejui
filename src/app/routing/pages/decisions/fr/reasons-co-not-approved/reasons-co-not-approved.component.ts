@@ -27,103 +27,148 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
         text: 'Select all that apply.'
     };
 
+    data = {
+            'partiesNeedAttend': true,
+            'NotEnoughInformation': false,
+            'capitalPositions': false,
+        };
     @Input() checkboxes = [
         {
-            value: 'partiesNeedAttend',
+            control: 'partiesNeedAttend',
+            value: this.data.partiesNeedAttend,
             text: 'The parties need to attend a hearing'
         },
         {
-            value: 'NotEnoughInformation',
+            control: 'NotEnoughInformation',
+            value: false,
             text: 'Not enough information was supplied to decide if the order is fair',
             sub: {
                 legend: 'Information required',
                 checkboxes: [
                     {
-                        value: 'capitalPositions',
+                        control: 'capitalPositions',
+                        value: this.data.capitalPositions,
                         text: 'The parties’ capital positions if the order were to take effect'
                     },
                     {
-                        value: 'partiesHousingNeeds',
+                        control: 'partiesHousingNeeds',
+                        value: false,
                         text: 'The parties’ housing needs and whether they are met by the order'
                     },
                     {
-                        value: 'justificationDeparture',
+                        control: 'justificationDeparture',
+                        value: false,
                         text: 'The justification for departure from equality of capital'
                     },
                     {
-                        value: 'partiesPensionProvision',
+                        control: 'partiesPensionProvision',
+                        value: false,
                         text: 'The parties’ pension provision if the order were to take effect'
                     },
                     {
-                        value: 'childrensHousingNeeds',
+                        control: 'childrensHousingNeeds',
+                        value: false,
                         text: 'The children’s housing needs and whether they are met by the order'
                     },
                     {
-                        value: 'netEffectOrder',
+                        control: 'netEffectOrder',
+                        value: false,
                         text: 'The net effect of the order'
                     },
                     {
-                        value: 'Other1',
+                        control: 'Other2',
+                        value: false,
                         text: 'Other',
                         sub: {
                             legend: 'What information is needed?',
-                            value: 'informationNeeded',
-                            textarea: ''
+                            textareas: [
+                                {
+                                    control: 'informationNeeded',
+                                    value: 'Infrmation text'
+                                }
+                            ]
                         }
                     }
                 ]
             }
         },
         {
-            value: 'd81',
+            control: 'd81',
+            value: false,
             text: 'The D81 form is incomplete'
         },
         {
-            value: 'pensionAnnex',
+            control: 'pensionAnnex',
+            value: false,
             text: 'The pension annex was not attached'
         },
         {
-            value: 'applicantTakenAdvice',
+            control: 'applicantTakenAdvice',
+            value: false,
             text: 'It’s not clear if the applicant has taken independent legal advice'
         },
         {
-            value: 'respondentTakenAdvice',
+            control: 'respondentTakenAdvice',
+            value: false,
             text: 'It’s not clear if the respondent has taken independent legal advice'
         },
         {
-            value: 'Other2',
+            control: 'Other2',
+            value: false,
             text: 'Other',
             sub: {
                 legend: 'Reason',
-                value: 'Reason',
-                textarea: ''
+                textareas: [
+                    {
+                        control: 'Reason',
+                        value: 'Reason text'
+                    }
+                ]
             }
         }
     ];
 
     constructor( private route: ActivatedRoute,
                  private router: Router ) {}
+    defineFormControls(item){
+        this.FormControls[item.control] = new FormControl( item.value );
+       console.log("Sub=>", item.control, this.FormControls[item.control]);
+    }
+
     ngOnInit() {
         for (const item of this.checkboxes) {
-            this.FormControls[item.value] = new FormControl ();
+            this.defineFormControls(item);
             if (item.sub) {
                 if (item.sub.checkboxes) {
                     for (const subitem of item.sub.checkboxes) {
-                        this.FormControls[subitem.value] = new FormControl();
+                        this.defineFormControls(subitem);
+                        if (subitem.sub) {
+                            if (subitem.sub.textareas) {
+                                for (const subsubitem of subitem.sub.textareas) {
+                                    this.defineFormControls(subsubitem);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (item.sub.textareas) {
+                    for (const subitem of item.sub.textareas) {
+                        this.defineFormControls(subitem);
                     }
                 }
             }
         }
 
-        console.log(this.FormControls);
+        //console.log(this.FormControls);
 
         this.rejectReasonsForm = new FormGroup (this.FormControls);
+       //this.rejectReasonsForm.setValue();
 
         this.case = this.route.parent.snapshot.data['caseData'];
-        console.log(this.case);
+       // console.log(this.case);
 
         this.decision = this.route.parent.snapshot.data['decision'];
-        console.log(this.decision);
+      //  console.log(this.decision);
         this.options = this.case.decision.options;
     }
     onSubmit() {

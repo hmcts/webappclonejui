@@ -17,7 +17,7 @@
                             <ng-container  *ngFor="let item of checkboxes; let i = index">
 
                                 <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" type="checkbox" id="{{idPrefix + '-' + (i+1)}}" formControlName="{{item.value}}">
+                                    <input class="govuk-checkboxes__input" type="checkbox" id="{{idPrefix + '-' + (i+1)}}" formControlName="{{item.control}}" value="{{item.value}}">
                                     <label class="govuk-label govuk-checkboxes__label" for="{{idPrefix + '-' + (i+1)}}">
                                         {{item.text}}
                                     </label>
@@ -30,10 +30,9 @@
                                             <legend *ngIf="item.sub.legend" class="govuk-fieldset__legend govuk-fieldset__legend--m">
                                                 {{ item.sub.legend }}
                                             </legend>
-                                            {{item.sub | json }}
 
-                                            <ng-container *ngIf="item.sub.hasOwnProperty('textarea')">
-                                                <textarea class="govuk-textarea" rows="5">{{item.sub.textarea}}</textarea>
+                                            <ng-container *ngIf="item.sub.textareas">
+                                                <textarea class="govuk-textarea" rows="5" formControlName="{{item.sub.textareas[0].control}}"></textarea>
                                             </ng-container>
 
                                             <ng-container *ngIf="item.sub.checkboxes">
@@ -41,16 +40,15 @@
 
                                                     <ng-container  *ngFor="let subitem of item.sub.checkboxes; let j = index">
                                                         <div  class="govuk-checkboxes__conditional" id="conditional-reject-3" *ngIf="subitem.sub">
-                                                            <div  class="govuk-form-group" ng-switch="Object.keys(subitem.sub)">
+                                                            <div  class="govuk-form-group">
                                                                 <fieldset class="govuk-fieldset">
-                                                                    <div ng-switch-when="legend">
+                                                                    <div *ngIf="subitem.sub.legend">
                                                                         <label class="govuk-fieldset__legend govuk-fieldset__legend--m">
                                                                             {{subitem.sub.legend}}
                                                                         </label>
-                                                                        <div ng-switch-when="textarea">
-                                                                            <textarea class="govuk-textarea" rows="5" >{{subitem.sub.textarea}}</textarea>
-                                                                        </div>
-                                                                        <app-checkbox [items]="subitem.sub.checkboxes" [group]="rejectReasonsForm" [idPrefix]="idPrefix"></app-checkbox>
+                                                                    </div>
+                                                                    <div *ngIf="subitem.sub.textareas">
+                                                                        <textarea class="govuk-textarea" rows="5" formControlName="{{subitem.sub.textareas[0].control}}"></textarea>
                                                                     </div>
                                                                 </fieldset>
                                                             </div>
