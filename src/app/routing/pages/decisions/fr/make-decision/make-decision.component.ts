@@ -13,11 +13,11 @@ export class MakeDecisionComponent implements OnInit {
 
     @Input() items = [
         {
-            value: 'yes',
+            value: true,
             text: 'Yes'
         },
         {
-            value: 'no',
+            value: false,
             text: 'No'
         }
     ];
@@ -28,16 +28,18 @@ export class MakeDecisionComponent implements OnInit {
 
     ngOnInit() {
         this.formDraft = new FormGroup ({
-            radioButtons: new FormControl ('no')
+            radioButtons: new FormControl (false)
         });
     }
 
 
     onSubmit() {
-        if (this.formDraft.controls.radioButtons.value === 'no') {
-            this.router.navigate([`../reject-reasons/${this.formDraft.controls.radioButtons.value}`], {relativeTo: this.activatedRoute});
-        } else {
-            this.router.navigate([`../reject-reasons/${this.formDraft.controls.radioButtons.value}`], {relativeTo: this.activatedRoute});
-        }
+        console.log(this.formDraft);
     }
+    //     if (this.formDraft.controls.radioButtons.value === 'no') {
+    //         this.router.navigate([`../reject-reasons/${this.formDraft.controls.radioButtons.value}`], {relativeTo: this.activatedRoute});
+    //     } else {
+    //         this.router.navigate([`../reject-reasons/${this.formDraft.controls.radioButtons.value}`], {relativeTo: this.activatedRoute});
+    //     }
+    // }
 }
