@@ -41,17 +41,21 @@ function generateAPIRequest(method, subURL, params) {
     return requestPromise;
 }
 
-suite('API/DECISIONS -> FR case -> basic GET scenario', () => {
-    test('Request GET non-existent step (/blahBlah) - error handling ', () => {
-        return generateAPIRequest('GET', `/api/decisions/state/${mainCaseID}/blahBlah`, {})
+function generateAPIRequestForFR(method, subURL, params) {
+    return generateAPIRequest(method, `/api/decisions/state/${mainCaseID}${subURL}`, params);
+}
+
+suite('API/DECISIONS -> FR case -> simple GET-s', () => {
+    test('GET non-existent step (/blahBlah) - error handling ', () => {
+        return generateAPIRequestForFR('GET', '/blahBlah', {})
             .catch(error => {
                 const response = error.response;
                 response.statusCode.should.be.eql(404)
                 response.body.should.not.have.property('meta')
             });
     });
-    test('Request GET first step (/decision) - basic ', () => {
-        return generateAPIRequest('GET', `/api/decisions/state/${mainCaseID}/decision`, {})
+    test('GET 1st step (/decision)', () => {
+        return generateAPIRequestForFR('GET', '/decision', {})
             .then(response => {
                 response.statusCode.should.be.eql(200)
                 response.body.should.have.property('meta')
@@ -60,8 +64,8 @@ suite('API/DECISIONS -> FR case -> basic GET scenario', () => {
                 response.body.should.have.property('formValues')
             });
     });
-    test('Request GET 2nd step (/) - basic ', () => {
-        return generateAPIRequest('GET', `/api/decisions/state/${mainCaseID}/reject-reasons`, {})
+    test('GET 2nd step (/reject-reasons)', () => {
+        return generateAPIRequestForFR('GET', '/reject-reasons', {})
             .then(response => {
                 response.statusCode.should.be.eql(200)
                 response.body.should.have.property('meta')
@@ -69,5 +73,39 @@ suite('API/DECISIONS -> FR case -> basic GET scenario', () => {
                 response.body.meta[0].control.should.be.eql('partiesNeedAttend')
                 response.body.should.have.property('formValues')
         });
+    });
+});
+
+suite('API/DECISIONS -> any case -> testing of values persistency (generic, no specific case-type related)', () => {
+    testValuesObjectA = {
+        testKey: 'testValue'
+    };
+    test('GET - should have empty formValues', () => {
+        return generateAPIRequestForFR('GET', '/decision', {})
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('formValues')
+                response.body.formValues.should.be.eql({})
+            });
+    });
+    test('POST - set some formValues', () => {
+        return generateAPIRequestForFR('POST', '/decision', {
+            body: {
+                formValues: testValuesObjectA
+            }
+        })
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('formValues')
+                response.body.formValues.should.be.eql(testValuesObjectA)
+            });
+    });
+    test('GET - should have formValues set in the previous one', () => {
+        return generateAPIRequestForFR('GET', '/decision', {})
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('formValues')
+                response.body.formValues.should.be.eql(testValuesObjectA)
+            });
     });
 });
