@@ -11,7 +11,7 @@ function handlePostState(req, res, response) {
     if (req.body.formValues) {
         // TODO: some data validation should be here
         dummyFormDataStore = req.body.formValues;
-        console.log(dummyFormDataStore);    
+        console.log(dummyFormDataStore);
     }
 }
 
@@ -21,8 +21,11 @@ function handleStateRoute(req, res, next) {
 
     let inRoute = req.params.state_id;
 
-    if (stateMeta.pages[inRoute]) {
-        response.meta = stateMeta.pages[inRoute].uiControls;
+    //Roman - Due to State Meta stucture changed I need to pass here Judistdiction as well to match state metaData
+    let inRouteJur = req.params.jur_id;
+
+    if (stateMeta[inRouteJur]) {
+        response.meta = stateMeta[inRouteJur][inRoute];
         if (req.method == 'POST')
         {
             handlePostState(req, res, response);
@@ -44,6 +47,6 @@ module.exports = app => {
     app.use('/decisions', router);
 
     //router.get('/state/:case_id', handleStateGetRoute);
-    router.get('/state/:case_id/:state_id', handleStateRoute);
-    router.post('/state/:case_id/:state_id', handleStateRoute);
+    router.get('/state/:case_id/:jur_id/:state_id', handleStateRoute);
+    router.post('/state/:case_id/:jur_id/:state_id', handleStateRoute);
 }
