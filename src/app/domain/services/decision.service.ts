@@ -18,14 +18,14 @@ export class DecisionService {
             private router: Router
     ) { }
 
-    generateDecisionUrl(caseId: string, jurId: string, pageId: string) {
+    generateDecisionUrl(caseId: string, jurId?: string, pageId?: string) {
         //old Mike implementation          return `${this.configService.config.api_base_url}/api/decisions/${caseId}`;
         if (pageId === undefined) { pageId = 'create';}
         if (jurId === undefined) { jurId = 'fr'}
         return `${this.configService.config.api_base_url}/api/decisions/state/${caseId}/${jurId}/${pageId}`;
     }
 
-    fetch(caseId, jurId, pageId): Observable<any> {
+    fetch(caseId, jurId?, pageId?): Observable<any> {
         const url = this.generateDecisionUrl(caseId, jurId, pageId);
 
         console.log(url);
