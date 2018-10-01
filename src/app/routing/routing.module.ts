@@ -31,6 +31,9 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import {DemoComponent} from './pages/demo/demo.component';
 import {GovukModule} from '../govuk/govuk.module';
 import {HmctsModule} from '../hmcts/hmcts.module';
+import { AnnotationUiLibModule } from '../shared/components/hmcts-annotation-ui-lib/annotation-ui-lib.module';
+import { AnnotationPdfViewerComponent } from '../shared/components/hmcts-annotation-ui-lib/viewer/annotation-pdf-viewer/annotation-pdf-viewer.component';
+import { AnnotationResolver } from '../shared/components/hmcts-annotation-ui-lib/annotation-resolver/annotation-resolver';
 
 const routes: Routes = [
     {
@@ -60,6 +63,13 @@ const routes: Routes = [
             caseData: CaseResolve
         },
         children: [
+            {
+                path: 'casefile/:pdf_id/annotate',
+                component: AnnotationPdfViewerComponent,
+                resolve: {
+                    annotationData: AnnotationResolver
+                }
+            },
             {
                 path: 'decision', component: DecisionRootComponent, resolve: {decision: DecisionResolve}, children: [
                     {path: 'create', component: CreateDecisionComponent},
@@ -123,7 +133,8 @@ const routes: Routes = [
         ReactiveFormsModule,
         JUIFormsModule,
         GovukModule,
-        HmctsModule
+        HmctsModule,
+        AnnotationUiLibModule
     ],
     declarations: [
         DashboardComponent,
@@ -139,12 +150,14 @@ const routes: Routes = [
         CreateHearingComponent,
         CheckHearingComponent,
         HearingConfirmationComponent,
-        DemoComponent
+        DemoComponent,
+        AnnotationPdfViewerComponent
     ],
     providers: [
         CaseResolve,
         DecisionResolve,
-        RedirectionService
+        RedirectionService,
+        AnnotationResolver
     ],
     exports: [
         RouterModule

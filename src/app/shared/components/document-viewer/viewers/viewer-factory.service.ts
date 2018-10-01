@@ -1,5 +1,6 @@
 import {ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef} from '@angular/core';
 import {PdfViewerComponent} from './pdf-viewer/pdf-viewer.component';
+import { AnnotationPdfViewerComponent } from '../../hmcts-annotation-ui-lib/viewer/annotation-pdf-viewer/annotation-pdf-viewer.component';
 import {ImgViewerComponent} from './img-viewer/img-viewer.component';
 import {Viewer} from './viewer';
 import {UnsupportedViewerComponent} from './unsupported-viewer/unsupported-viewer.component';
@@ -14,6 +15,7 @@ export class ViewerFactoryService {
         }
         if (ViewerFactoryService.isPdf(mimeType)) {
             return PdfViewerComponent;
+            // return AnnotationPdfViewerComponent;
         }
         return UnsupportedViewerComponent;
     }

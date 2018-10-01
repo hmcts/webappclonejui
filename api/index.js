@@ -5,6 +5,7 @@ const router = express.Router();
 const auth = require('./auth');
 const caseRoutes = require('./cases');
 const decisionRoutes = require('./decisions');
+const annotationRouter = require('./annotations');
 const questions = require('./questions/question');
 const events = require('./events/event');
 const hearingRoutes = require('./hearings/hearing');
@@ -33,6 +34,7 @@ documents(router);
 hearingRoutes(router);
 caseRoutes(router);
 decisionRoutes(router);
+annotationRouter(router);
 
 
 // Uncomment to enable direct access to Microservices
