@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Subject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { PdfAdapter } from './store-adapter';
-import { ConfigService } from '../../../../config.service';
-import { v4 as uuid } from 'uuid';
 
 declare const PDFJS: any;
 declare const PDFAnnotate: any;
@@ -21,11 +18,9 @@ export class AnnotationService {
   annotationData: any;
   pdfPages: number;
 
-  constructor(private configService: ConfigService,
-              private httpClient: HttpClient,
-              private router: Router,
+  constructor(private router: Router,
               private route: ActivatedRoute,
-              private pdfAdapter: PdfAdapter) {}
+              public pdfAdapter: PdfAdapter) {}
   
   preRun() {
       this.pdfAdapter.setStoreData(this.annotationData);
@@ -36,31 +31,6 @@ export class AnnotationService {
 
       this.pageNumber = new Subject();
       this.pageNumber.next(1);
-  }
-
-  saveData() {
-    this.annotationData.annotations = this.pdfAdapter.data;
-    this.annotationData.annotations.forEach(annotation => {
-
-      const saveAnnotation = {
-        id: annotation.id,
-        type: annotation.type,
-        rectangles: annotation.rectangles,
-        color: annotation.color,
-        page: annotation.page,
-        annotationSetId: annotation.annotationSetId,
-        comments: annotation.comments
-      }
-      this.saveAnnotation(saveAnnotation).subscribe(
-        response => console.log(response),
-        error => console.log(error)
-      );
-    });
-  }
-
-  saveAnnotation(annotation): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/annotation/annotations`;
-    return this.httpClient.post(url, annotation);
   }
 
   getPageNumber(): Subject<number> {

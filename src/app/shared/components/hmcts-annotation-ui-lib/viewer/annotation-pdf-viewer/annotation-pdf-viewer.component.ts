@@ -65,12 +65,14 @@ export class AnnotationPdfViewerComponent implements OnInit, OnChanges {
   getClickedPage(event) {
     let currentParent = event.target;
     for (let step = 0; step < 5; step++) {
+      if(currentParent.parentNode != null) {
         const pageNumber = currentParent.parentNode.getAttribute('data-page-number');
         if (pageNumber != null) {
           this.annotationService.setPageNumber(parseInt(pageNumber));
           break;
         };
       currentParent = currentParent.parentNode;
+      }
     }
     this.tool = 'cursor';
   }

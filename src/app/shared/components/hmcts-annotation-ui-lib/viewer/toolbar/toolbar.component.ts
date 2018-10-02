@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges, Output, EventEmitter } from '@angular/core';
 import { AnnotationService } from '../../data/annotation.service';
+import { AnnotationStoreService } from '../../data/annotation-store.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,7 +16,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Input() tool: string;
   @Output() toolChange: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private annotationService: AnnotationService) {
+  constructor(private annotationService: AnnotationService,
+              private annotationStoreService: AnnotationStoreService) {
   }
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   }
 
   onSaveClick() {
-    this.annotationService.saveData();
+    this.annotationStoreService.saveData();
   }
 
   // handleScaleChange(event: Event) {

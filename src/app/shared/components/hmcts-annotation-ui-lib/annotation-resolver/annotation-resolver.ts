@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AnnotationService } from '../data/annotation.service';
 import { AnnotationStoreService } from '../data/annotation-store.service';
-
 
 @Component({
   selector: 'aui-annotation-resolver',

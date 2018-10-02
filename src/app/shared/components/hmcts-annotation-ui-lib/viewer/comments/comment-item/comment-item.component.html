@@ -3,18 +3,21 @@
   (ngSubmit)="onSubmit()" #commentItem="ngForm" 
   (click)="handleCommentClick($event)">
   <div class="comment-meta">
-    <label>{{comment.author}}</label>
+    <label>Created By: {{comment.createdBy}}</label>
     <br>
     <label ng-controller="datCtrl">Created On: {{ comment.createdDate | date: 'd/M/y HH:mm' }}</label>
-    <label *ngIf="comment.modifiedDate != null" ng-controller="datCtrl">Modified: {{ comment.modifiedDate | date }}</label>
+    <div *ngIf="comment.lastModifiedDate != null && comment.createdDate != comment.lastModifiedDate">
+        <label><br>Last modified By: {{ comment.lastModifiedBy }}</label>
+      <label ng-controller="datCtrl"><br>{{ comment.lastModifiedDate | date: 'd/M/y HH:mm' }}</label>
+    </div>
   </div>
 
   <input 
     type="hidden" 
-    id="author" 
+    id="createdBy" 
     required
-    [ngModel]="comment.author" name="author"
-    value={{comment.author}}>
+    [ngModel]="comment.createdBy" name="createdBy"
+    value={{comment.createdBy}}>
 
   <textarea 
     (focus)="onFocus()"
@@ -23,7 +26,7 @@
     class="form-control" id="comment"
     required
     #commentTextField
-    [ngModel]="comment.content" name="comment"
+    [ngModel]="comment.content" name="content"
     value="comment.content"></textarea>
 
   <input 

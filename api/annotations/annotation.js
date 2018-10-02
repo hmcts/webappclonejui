@@ -3,8 +3,8 @@ const config = require('../../config');
 const generateRequest = require('../lib/request');
 
 
-function getAnnotionSet(uuid, headers) {
-    return generateRequest('GET', `${config.services.em_anno_api}/api/annotation-sets/filter?documentId=${uuid}`, { headers });
+function getAnnotionSet(uuid, options) {
+    return generateRequest('GET', `${config.services.em_anno_api}/api/annotation-sets/filter?documentId=${uuid}`, options);
 }
 
 function createAnnotationSet(options) {
@@ -12,16 +12,11 @@ function createAnnotationSet(options) {
 }
 
 function addAnnotation(options) {
-    console.log(options);
     return generateRequest('POST', `${config.services.em_anno_api}/api/annotations`, options);
 }
 
-function getAnnotionHealth(options) {
-    return generateRequest('GET', `${config.services.em_anno_api}/health`, options);
-}
-
-function getAnnotionInfo(options) {
-    return generateRequest('GET', `${config.services.em_anno_api}/info`, options);
+function deleteAnnotation(uuid, options) {
+    return generateRequest('DELETE', `${config.services.em_anno_api}/api/annotations/${uuid}`, options);
 }
 
 function getOptions(req) {
@@ -41,6 +36,7 @@ module.exports = app => {
     router.post('/annotation-sets', (req, res, next) => {
         // Called when get annotation-sets returns 404
         const options = getOptions(req);
+
         createAnnotationSet(options)
             .then(response => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
@@ -53,14 +49,10 @@ module.exports = app => {
     });
 
     router.get('/annotation-sets/:uuid', (req, res, next) => {
-        
-        const headers = {
-            Authorization: `Bearer ${req.auth.token}`,
-            ServiceAuthorization: req.headers.ServiceAuthorization
-        };
+        const options = getOptions(req);
         const uuid = req.params.uuid;
 
-        getAnnotionSet(uuid, headers)
+        getAnnotionSet(uuid, options)
             .then(response => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('content-type', 'application/json');
@@ -72,37 +64,25 @@ module.exports = app => {
             });
     });
 
+    router.delete('/annotations/:uuid', (req, res, next) => {
+        const options = getOptions(req);
+        const uuid = req.params.uuid;
+
+        deleteAnnotation(uuid, options)
+            .then(response => {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('content-type', 'application/json');
+                res.status(200).send(JSON.stringify(response));
+            })
+            .catch(response => {
+                res.status(response.error.status).send(response.error.message);
+            });
+    });
+
     router.post('/annotations', (req, res, next) => {
         const options = getOptions(req);
+
         addAnnotation(options)
-            .then(response => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader('content-type', 'application/json');
-                res.status(200).send(JSON.stringify(response));
-            })
-            .catch(response => {
-                res.status(response.error.status).send(response.error.message);
-            });
-    });
-
-    router.get('/info', (req, res, next) => {
-        const options = getOptions(req);
-
-        getAnnotionInfo(options)
-            .then(response => {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader('content-type', 'application/json');
-                res.status(200).send(JSON.stringify(response));
-            })
-            .catch(response => {
-                res.status(response.error.status).send(response.error.message);
-            });
-    });
-
-    router.get('/health', (req, res, next) => {
-        const options = getOptions(req);
-
-        getAnnotionHealth(options)
             .then(response => {
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('content-type', 'application/json');
