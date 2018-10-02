@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import { Comment } from '../viewer/comments/comment-model';
 
 declare const PDFAnnotate: any;
 
@@ -18,6 +19,17 @@ export class PdfAdapter {
         this.annotationSetId = data.id;
     }
 
+    editComment(comment: Comment) {
+        this.data.forEach(annotation => {
+            annotation.comments.forEach(
+            storeComment => {
+                if (storeComment.id == comment.id) {
+                    storeComment.content = comment.content;
+                };
+            })
+        });
+    }
+
     updateComments(documentId, comment) {
         this.commentData.push(comment);
     }
@@ -34,7 +46,6 @@ export class PdfAdapter {
         
         let getAnnotations = (documentId, pageNumber) => {
             return new Promise((resolve, reject) => {
-                // console.log(this.data);
                 var annotations = this._getAnnotations(documentId).filter(function (i) {
                     return i.page === pageNumber;
                   });
@@ -69,7 +80,7 @@ export class PdfAdapter {
                     rectangle => {
                       rectangle.id = uuid();
                     });
-                    
+
                 let annotations = this._getAnnotations(documentId);
                 annotations.push(annotation);
       
@@ -100,14 +111,6 @@ export class PdfAdapter {
             });
         };
 
-        let editComment = (documentId, comment) => {
-            return new Promise((resolve, reject) => {
-                var index = this.commentData.findIndex( c => c.id == comment.id);
-                this.commentData[index] = comment;
-                resolve(comment);
-            });
-        };
-
         let deleteComment = (documentId, commentId) => {
             return new Promise((resolve, reject) => {
                 this.commentData = this.remove(this.commentData, commentId);
@@ -130,7 +133,6 @@ export class PdfAdapter {
             editAnnotation,
             deleteAnnotation,
             addComment,
-            editComment,
             deleteComment
         })
     }

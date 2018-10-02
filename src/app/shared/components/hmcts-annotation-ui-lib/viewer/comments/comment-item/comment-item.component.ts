@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AnnotationService } from '../../../data/annotation.service';
 import { Comment } from '../comment-model';
 import { AnnotationStoreService } from '../../../data/annotation-store.service';
 
@@ -26,23 +25,19 @@ export class CommentItemComponent implements OnInit {
 
   model = new Comment(null, null, null, null, null, null, null);
 
-  constructor(private annotationService: AnnotationService,
-              private annotationStoreService: AnnotationStoreService,
-              private render: Renderer2) { }
+  constructor(private annotationStoreService: AnnotationStoreService,
+              private render: Renderer2) {
+  }
 
   ngOnInit() {
     this.focused = false;
   }
   
-  onSubmit() {  
-    let comment: Comment;
-    comment = this.convertFormToComment(this.commentItem);
+  onSubmit() { 
+    let comment = this.convertFormToComment(this.commentItem);
     comment.lastModifiedDate = new Date();
 
-    this.annotationStoreService.editComment(
-      comment,
-      function() {});
-
+    this.annotationStoreService.editComment(comment);
     this.commentSubmitted.emit(this.annotation);
   }
 
@@ -66,15 +61,11 @@ export class CommentItemComponent implements OnInit {
       commentForm.value.annotationId,
       null,
       null
-      );
+    );
   }
 
 	handleDeleteComment(event, commentId, annotationId) {
-		this.annotationStoreService.deleteComment(
-			commentId,
-      function() {});
-
-      console.log("delete called");
+		this.annotationStoreService.deleteComment(commentId);
   }
   
   handleCommentClick (event) {
