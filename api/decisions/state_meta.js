@@ -43,19 +43,9 @@ module.exports = {
                 }
             ]
         },
-        reject: {
-            uiControls: [
-                {
-                    control: 'partiesNeedAttend',
-                    dataKey: 'partiesNeedAttend',
-                    text: 'The parties need to attend a hearing'
-                },
-                {
-                    control: 'capitalPositions',
-                    dataKey: 'capitalPositions',
-                    text: 'The parties need to attend a hearing 2'
-                }
-            ]
+        'reject-reasons': {
+            idPrefix: 'reject-reasons',
+            name: 'reject-reasons'
         }
     }
 };
