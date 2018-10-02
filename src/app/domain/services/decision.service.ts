@@ -28,21 +28,27 @@ export class DecisionService {
         const pageId = 'create';
         const jurId = 'fr';
         const url = this.generateDecisionUrl(jurId, caseId, pageId);
-        console.log(url);
+        console.log('fetch', url);
 
         return this.httpClient.get(url);
     }
 
-    submitDecisionDraft(caseId: string, award: string, text: string): Observable<any> {
+    submitDecisionDraft(jurId: string, caseId: string, pageId: string, body: any): Observable<any> {
         const url = this.generateDecisionUrl('fr', caseId, 'create');
-        const body = {
-            decision_award: award,
-            decision_header: award,
-            decision_reason: text,
-            decision_text: text
-        };
+        console.log('Submit', url);
         return this.httpClient.post(url, body);
     }
+
+    // submitDecisionDraft(caseId: string, award: string, text: string): Observable<any> {
+    //     const url = this.generateDecisionUrl('fr', caseId, 'create');
+    //     const body = {
+    //         decision_award: award,
+    //         decision_header: award,
+    //         decision_reason: text,
+    //         decision_text: text
+    //     };
+    //     return this.httpClient.post(url, body);
+    // }
 
     updateDecisionDraft(caseId: string, award: string, text: string) {
         const url = this.generateDecisionUrl('fr', caseId, 'create');

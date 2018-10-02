@@ -2,7 +2,7 @@
 // The data below is a stub of ui Controls data
 // Data structure
 // Judistdiction =>> page_id ==> pagedata
-// api URL http://localhost:3000/api/decisions/state/1536577824150765/fr/create
+// api URL http://localhost:3000/api/decisions/state/fr/1536577824150765/create
 //
 
 module.exports = {
