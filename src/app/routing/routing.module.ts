@@ -36,6 +36,7 @@ import { MakeDecisionComponent } from './pages/decisions/fr/make-decision/make-d
 import { NotesForCourtAdministratorComponent } from './pages/decisions/fr/notes-for-court-administrator/notes-for-court-administrator.component';
 import { DraftConsentOrderComponent } from './pages/decisions/fr/draft-consent-order/draft-consent-order.component';
 import { HearingDetailsComponent } from './pages/decisions/fr/hearing-details/hearing-details.component';
+import {FormsService} from '../shared/services/forms.service';
 
 const routes: Routes = [
     {

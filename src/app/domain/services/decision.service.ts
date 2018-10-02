@@ -18,31 +18,23 @@ export class DecisionService {
             private router: Router
     ) { }
 
-    generateDecisionUrl(caseId: string, jurId?: string, pageId?: string) {
-        //old Mike implementation          return `${this.configService.config.api_base_url}/api/decisions/${caseId}`;
-        if (pageId === undefined) { pageId = 'create';}
-        if (jurId === undefined) { jurId = 'fr'}
-        return `${this.configService.config.api_base_url}/api/decisions/state/${caseId}/${jurId}/${pageId}`;
+    generateDecisionUrl( jurId: string, caseId: string, pageId: string ) {
+        // old Mike implementation
+        // return `${this.configService.config.api_base_url}/api/decisions/${caseId}`;
+        return `${this.configService.config.api_base_url}/api/decisions/state/${jurId}/${caseId}/${pageId}`;
     }
 
-    fetch(caseId, jurId?, pageId?): Observable<any> {
-        const url = this.generateDecisionUrl(caseId, jurId, pageId);
-
+    fetch(caseId: string): Observable<any> {
+        const pageId = 'create';
+        const jurId = 'fr';
+        const url = this.generateDecisionUrl(jurId, caseId, pageId);
         console.log(url);
-        //this.router.events.subscribe((url:any) => console.log(url));
 
-        //console.log(this.router.url);
-        //console.log("router", this.activatedRoute );
-        //
-        // const key = makeStateKey(url);
-        // const cache = this.state.get(key, null as any);
-        //
-        // if (cache) return of(cache);
         return this.httpClient.get(url);
     }
 
     submitDecisionDraft(caseId: string, award: string, text: string): Observable<any> {
-        const url = this.generateDecisionUrl(caseId, 'decision');
+        const url = this.generateDecisionUrl('fr', caseId, 'create');
         const body = {
             decision_award: award,
             decision_header: award,
@@ -53,7 +45,7 @@ export class DecisionService {
     }
 
     updateDecisionDraft(caseId: string, award: string, text: string) {
-        const url = this.generateDecisionUrl(caseId);
+        const url = this.generateDecisionUrl('fr', caseId, 'create');
         const body = {
             decision_award: award,
             decision_header: award,
@@ -65,7 +57,7 @@ export class DecisionService {
     }
 
     issueDecision(caseId: string, decision: any): Observable<any>  {
-        const url = this.generateDecisionUrl(caseId);
+        const url = this.generateDecisionUrl('fr', caseId, 'create';
 
         const body = {
             decision_award: decision.decision_award,
