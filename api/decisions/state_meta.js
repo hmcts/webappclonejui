@@ -18,7 +18,7 @@ module.exports = {
                             control: 'approveDraftConsent',
                             radioGroup: [
                                 {
-                                    value: 'Yes',
+                                    value: 'yes',
                                     text: 'Yes'
                                 },
                                 {
@@ -27,7 +27,7 @@ module.exports = {
                                     checked: true
                                 },
                                 {
-                                    value: 'No',
+                                    value: 'no',
                                     text: 'No'
                                 }
                             ]
