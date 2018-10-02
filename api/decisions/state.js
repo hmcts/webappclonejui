@@ -15,28 +15,34 @@ function handlePostState(req, res, response) {
     }
 }
 
-function handleStateRoute(req, res, next) {
-    const caseId = req.params.case_id;
-    const response = {};
-
-    let inRoute = req.params.state_id;
-
-    //Roman - Due to State Meta stucture changed I need to pass here Judistdiction as well to match state metaData
-    let inRouteJur = req.params.jur_id;
-
-    if (stateMeta[inRouteJur]) {
-        response.meta = stateMeta[inRouteJur][inRoute];
-        if (req.method == 'POST')
-        {
-            handlePostState(req, res, response);
-        }
-        response.formValues = dummyFormDataStore;
-    } else {
+function responseAssert(res, responseJSON, condition, statusHint) {
+    if (!condition) {
         res.status(404);
-        response.statusHint = 'Input parameter route_id: uknown route_id';
+        responseJSON.statusHint = statusHint;
     }
 
-    res.send(JSON.stringify(response));
+    return condition;
+}
+
+function handleStateRoute(req, res) {
+    const caseId = req.params.case_id;
+    const responseJSON = {};
+
+    const inRoute = req.params.state_id;
+    const inRouteJur = req.params.jur_id;
+
+    if (responseAssert(res, responseJSON, stateMeta[inRouteJur], 'Input parameter route_id: uknown jurisdiction') 
+        && responseAssert(res, responseJSON, stateMeta[inRouteJur][inRoute], 'Input parameter route_id wrong: no route with this id inside jurisdiction ${inRouteJur}')
+    ) {
+        responseJSON.meta = stateMeta[inRouteJur][inRoute];
+        if (req.method === 'POST')
+        {
+            handlePostState(req, res, responseJSON);
+        }
+        responseJSON.formValues = dummyFormDataStore;
+    }
+
+    res.send(JSON.stringify(responseJSON));
 };
 
 function handleStatePostRoute(req, res, next) {
@@ -47,6 +53,6 @@ module.exports = app => {
     app.use('/decisions', router);
 
     //router.get('/state/:case_id', handleStateGetRoute);
-    router.get('/state/:case_id/:jur_id/:state_id', handleStateRoute);
-    router.post('/state/:case_id/:jur_id/:state_id', handleStateRoute);
+    router.get('/state/:jur_id/:case_id/:state_id', handleStateRoute);
+    router.post('/state/:jur_id/:case_id/:state_id', handleStateRoute);
 }
