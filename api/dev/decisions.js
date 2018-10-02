@@ -65,7 +65,7 @@ suite('API/DECISIONS -> FR case -> simple GET-s', () => {
                 response.body.should.have.property('meta')
                 response.body.meta.should.have.property('idPrefix')
                 response.body.meta.should.have.property('name')
-                response.body.meta.name.should.be.eql('create')
+                response.body.meta.idPrefix.should.be.eql('create')
                 response.body.should.have.property('formValues')
             });
     });
@@ -115,5 +115,59 @@ suite('API/DECISIONS -> any case -> testing of values persistency (generic, no s
 });
 
 suite('API/DECISIONS -> FR case -> Full scenario of user "APPROVE the draft"', () => {
+    test('GET 1st step (/create)', () => {
+        return generateAPIRequestForFR('GET', '/create', {})
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('meta')
+                response.body.meta.should.have.property('idPrefix')
+                response.body.should.have.property('formValues')
+            });
+    });
+    test('POST - approve', () => {
+        return generateAPIRequestForFR('POST', '/create', {
+            body: {
+                formValues: { approveDraftConsent: 'yes' },
+                event: 'continue'
+            }
+        })
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('formValues')
+                response.body.should.have.property('newRoute')
+                response.body.newRoute.should.be.eql('notes-for-court-administrator')
+                response.body.should.have.property('meta')
+                response.body.meta.should.have.property('idPrefix')
+                response.body.meta.idPrefix.should.be.eql('notes-for-court-administrator')
+            });
+    });
+});
 
+suite('API/DECISIONS -> FR case -> Full scenario of user "REJECT the draft"', () => {
+    test('GET 1st step (/create)', () => {
+        return generateAPIRequestForFR('GET', '/create', {})
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('meta')
+                response.body.meta.should.have.property('idPrefix')
+                response.body.should.have.property('formValues')
+            });
+    });
+    test('POST - approve', () => {
+        return generateAPIRequestForFR('POST', '/create', {
+            body: {
+                formValues: { approveDraftConsent: 'no' },
+                event: 'continue'
+            }
+        })
+            .then(response => {
+                response.statusCode.should.be.eql(200)
+                response.body.should.have.property('formValues')
+                response.body.should.have.property('newRoute')
+                response.body.newRoute.should.be.eql('reject-reasons')
+                response.body.should.have.property('meta')
+                response.body.meta.should.have.property('idPrefix')
+                response.body.meta.idPrefix.should.be.eql('reject-reasons')
+            });
+    });
 });

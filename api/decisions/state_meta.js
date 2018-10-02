@@ -46,6 +46,10 @@ module.exports = {
         'reject-reasons': {
             idPrefix: 'reject-reasons',
             name: 'reject-reasons'
+        },
+        'notes-for-court-administrator': {
+            idPrefix: 'notes-for-court-administrator',
+            name: 'notes-for-court-administrator'
         }
     }
 };
