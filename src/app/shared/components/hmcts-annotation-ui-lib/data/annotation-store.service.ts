@@ -14,19 +14,20 @@ export class AnnotationStoreService {
 
   constructor(private annotationService: AnnotationService,
               private httpClient: HttpClient,
-              private configService: ConfigService) { 
+              private configService: ConfigService) {      
   }
 
   saveData() {
-    const toKeepAnnotations = this.annotationService.annotationData.annotations
-          .filter((word) => this.annotationService.pdfAdapter.data.includes(word));
+    let loadedData = this.annotationService.pdfAdapter.loadedData;
+    const toKeepAnnotations = loadedData.annotations
+          .filter((annotation) => this.annotationService.pdfAdapter.annotations.includes(annotation));
 
-    const toRemoveAnnotations = this.annotationService.annotationData.annotations
-      .filter((word) => !this.annotationService.pdfAdapter.data.includes(word));
+    const toRemoveAnnotations = loadedData.annotations
+          .filter((annotation) => !this.annotationService.pdfAdapter.annotations.includes(annotation));
 
-    this.annotationService.annotationData.annotations = toKeepAnnotations;
+    loadedData.annotations = toKeepAnnotations;
 
-    this.annotationService.annotationData.annotations.forEach(annotation => {
+    loadedData.annotations.forEach(annotation => {
       const saveAnnotation = {
         id: annotation.id,
         type: annotation.type,
@@ -49,6 +50,8 @@ export class AnnotationStoreService {
         error => console.log(error)
       );
     });
+
+    this.annotationService.pdfAdapter.loadedData = loadedData;
   }
 
   deleteAnnotation(annotation): Observable<any> {
