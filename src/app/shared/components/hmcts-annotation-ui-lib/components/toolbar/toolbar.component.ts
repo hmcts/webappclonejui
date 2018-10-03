@@ -11,7 +11,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   @ViewChild("highlightTool") highlightTool: ElementRef;
   @ViewChild("pointerTool") pointerPool: ElementRef;
-  @ViewChild("zoomTool") zoomTool: ElementRef;
+  // @ViewChild("zoomTool") zoomTool: ElementRef;
 
   @Input() tool: string;
   @Output() toolChange: EventEmitter<string> = new EventEmitter<string>();
@@ -35,6 +35,10 @@ export class ToolbarComponent implements OnInit, OnChanges {
   handleHighlightClick() {
     this.tool = 'highlight';
     this.toolChange.emit(this.tool);
+  }
+
+  handleClearAnnotations() {
+    this.annotationStoreService.clearAnnotations();
   }
 
   handlePointerClick() {

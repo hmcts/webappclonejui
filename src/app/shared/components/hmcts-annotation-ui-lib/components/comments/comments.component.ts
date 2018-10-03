@@ -37,6 +37,7 @@ export class CommentsComponent implements OnInit {
 	  };
 
 	ngAfterViewInit() {
+		// todo - replace this with (click) command from parent object
 		document.querySelector('#viewer').addEventListener('click', this.handleAnnotationBlur.bind(this));
 		PDFAnnotate.UI.addEventListener('annotation:click', this.handleAnnotationClick.bind(this));
 	}
@@ -47,14 +48,16 @@ export class CommentsComponent implements OnInit {
 	}
 
 	showAllComments() {
+
+		// todo - refactor this out of component
 		this.annotationStoreService.getAnnotationsForPage(this.pageNumber).then(
 			(pageData: any) => {
 				
 				let annotations = pageData.annotations.slice();
 				this.sortByY(annotations);
 				
-				annotations.forEach(element => {
-					this.getAnnotationComments(element);
+				annotations.forEach(annotation => {
+					this.getAnnotationComments(annotation);
 				});
 				this.annotations = annotations;
 			});
@@ -72,6 +75,7 @@ export class CommentsComponent implements OnInit {
 	}
 
 	getAnnotationCommentsById(annotationId) {
+		// Refactor this out of component
 		this.annotationStoreService.getAnnotationById(annotationId).then(
 			annotation => {
 				this.annotations = this.getAnnotationComments(annotation);
@@ -79,6 +83,7 @@ export class CommentsComponent implements OnInit {
 	}
 
 	getAnnotationComments(annotation) {
+		// Refactor this out of component
 		annotation.comments = [];
 		this.annotationStoreService.getCommentsForAnnotation(annotation.id).then(
 			comments => {
@@ -108,6 +113,7 @@ export class CommentsComponent implements OnInit {
 	}
 
 	addHighlightedCommentStyle(linkedAnnotationId) {
+		// todo - refactor using JUI concat ``
 		const idPageSelector = '#pageContainer' + this.pageNumber;
 		const annotations = Array.from(document.querySelector(idPageSelector+' .annotationLayer').childNodes);
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { AnnotationService } from '../../data/annotation.service';
 
@@ -8,7 +8,7 @@ import { AnnotationService } from '../../data/annotation.service';
   styleUrls: ['./annotation-pdf-viewer.component.scss'],
   providers: []
 })
-export class AnnotationPdfViewerComponent implements OnInit, OnDestroy {
+export class AnnotationPdfViewerComponent implements OnInit {
 
   annotate: boolean;
   renderedPages: {};
@@ -45,9 +45,6 @@ export class AnnotationPdfViewerComponent implements OnInit, OnDestroy {
     this.annotationService.getPageNumber().subscribe(
       data => this.page = data
     )
-  }
-
-  ngOnDestroy() {
   }
 
   getClickedPage(event) {

@@ -80,6 +80,16 @@ export class AnnotationStoreService {
     this.annotationService.pdfAdapter.loadedData = loadedData;
   }
 
+  clearAnnotations() {
+    if (confirm('Are you sure you want to clear annotations?')) {
+      this.annotationService.pdfAdapter.annotations = [];
+      // for (let i = 0; i < this.pdfPages; i++) {
+      //   document.querySelector('div#pageContainer' + (i + 1) + ' svg.annotationLayer').innerHTML = '';
+      // }
+      // localStorage.removeItem(this.RENDER_OPTIONS.documentId + '/annotations');
+    }
+  }
+
   deleteAnnotationApi(annotation): Observable<any> {
     const url = `${this.configService.config.api_base_url}/api/annotation/annotations/${annotation.id}`;
     return this.httpClient.delete(url);
