@@ -38,7 +38,11 @@ const localConfig = [
         browserName: 'chrome',
         acceptInsecureCerts: true,
 
+<<<<<<< HEAD
         // chromeOptions: { args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--disable-setuid-sandbox', '--no-zygote '] },
+=======
+       chromeOptions: { args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--disable-setuid-sandbox', '--no-zygote '] },
+>>>>>>> master
         proxy: {
             proxyType: 'manual',
             httpProxy: 'proxyout.reform.hmcts.net:8080',
