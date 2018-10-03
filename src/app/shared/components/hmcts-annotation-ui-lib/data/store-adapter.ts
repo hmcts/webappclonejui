@@ -1,17 +1,19 @@
 import { v4 as uuid } from 'uuid';
-import { Comment } from '../viewer/comments/comment-model';
+import { Comment } from '../components/comments/comment-model';
 
 declare const PDFAnnotate: any;
 
 export class PdfAdapter {
-    data: any;
+    loadedData: any;
+    annotations: any;
     commentData: any[];
     annotationSetId: number;
 
     setStoreData(data) {
-        this.data = data.annotations;
+        this.loadedData = data;
+        this.annotations = data.annotations;
         this.commentData = [];
-        this.data.forEach(annotation => {
+        this.annotations.forEach(annotation => {
             annotation.comments.forEach(comment => {
                 this.commentData.push(comment);
             }); 
@@ -20,7 +22,7 @@ export class PdfAdapter {
     }
 
     editComment(comment: Comment) {
-        this.data.forEach(annotation => {
+        this.annotations.forEach(annotation => {
             annotation.comments.forEach(
             storeComment => {
                 if (storeComment.id == comment.id) {
@@ -35,7 +37,7 @@ export class PdfAdapter {
     }
 
     _getAnnotations(documentId) {
-        return this.data || [];
+        return this.annotations || [];
     }
 
     _getComments(documentId) {
@@ -90,8 +92,8 @@ export class PdfAdapter {
 
         let deleteAnnotation = (documentId, annotationId) => {
             return new Promise((resolve, reject) => {
-                this.data = this.remove(this.data, annotationId);
-                resolve(this.data);
+                this.annotations = this.remove(this.annotations, annotationId);
+                resolve(this.annotations);
             });
         };
 
@@ -114,7 +116,7 @@ export class PdfAdapter {
         let deleteComment = (documentId, commentId) => {
             return new Promise((resolve, reject) => {
                 this.commentData = this.remove(this.commentData, commentId);
-                resolve(this.data.comments);
+                resolve(this.annotations.comments);
             });
         };
 

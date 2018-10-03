@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PdfAdapter } from './store-adapter';
 
@@ -14,17 +13,13 @@ export class AnnotationService {
   comments;
   private RENDER_OPTIONS: { documentId: string, pdfDocument: any, scale: any, rotate: number };	
   private pageNumber: Subject<number>;
-
-  annotationData: any;
   pdfPages: number;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              public pdfAdapter: PdfAdapter) {}
+  constructor(public pdfAdapter: PdfAdapter) {
+  }
   
   preRun(annotationData) {
-      this.annotationData = annotationData;
-      this.pdfAdapter.setStoreData(this.annotationData);
+      this.pdfAdapter.setStoreData(annotationData);
       PDFAnnotate.setStoreAdapter(this.pdfAdapter.getStoreAdapter());
 
       this.PAGE_HEIGHT = void 0;
@@ -32,6 +27,16 @@ export class AnnotationService {
 
       this.pageNumber = new Subject();
       this.pageNumber.next(1);
+  }
+
+  preRunNoAnnotations() {
+    PDFAnnotate.setStoreAdapter(new PDFAnnotate.LocalStoreAdapter());
+
+    this.PAGE_HEIGHT = void 0;
+    this.UI = PDFAnnotate.UI;
+
+    this.pageNumber = new Subject();
+    this.pageNumber.next(1);
   }
 
   getPageNumber(): Subject<number> {
@@ -76,8 +81,8 @@ export class AnnotationService {
       });
     }).catch(
       (error) => {
-        let message = "Unable to render your supplied PDF. " + this.RENDER_OPTIONS.documentId + ". Error is: " + error;
-        this.router.navigate(['error', message], {relativeTo: this.route});
+        const errorMessage = new Error("Unable to render your supplied PDF. " + this.RENDER_OPTIONS.documentId + ". Error is: " + error);
+        console.log(errorMessage);
       }
     );
   }

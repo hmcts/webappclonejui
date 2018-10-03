@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject, OnChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild, ElementRef, Inject, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { AnnotationService } from '../../data/annotation.service';
-import { UrlFixerService } from '../../../document-viewer/url-fixer.service';
-import { Viewer } from '../../../document-viewer/viewers/viewer';
 
 @Component({
   selector: 'app-annotation-pdf-viewer',
@@ -11,14 +8,14 @@ import { Viewer } from '../../../document-viewer/viewers/viewer';
   styleUrls: ['./annotation-pdf-viewer.component.scss'],
   providers: []
 })
+export class AnnotationPdfViewerComponent implements OnInit, OnDestroy {
 
-export class AnnotationPdfViewerComponent implements OnInit, OnChanges {
-
+  annotate: boolean;
   renderedPages: {};
+  page: number;
   dmDocumentId: string;
   url = '';
   annotationData: any;
-  page: number;
   tool: String;
 
   @ViewChild("contentWrapper") contentWrapper: ElementRef;
@@ -28,7 +25,11 @@ export class AnnotationPdfViewerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.annotationService.preRun(this.annotationData);
+    if (this.annotate) {
+      this.annotationService.preRun(this.annotationData);
+    } else {
+      this.annotationService.preRunNoAnnotations();
+    }
 
     this.annotationService.setRenderOptions({
       documentId: this.url,
@@ -39,12 +40,14 @@ export class AnnotationPdfViewerComponent implements OnInit, OnChanges {
 
     this.renderedPages = {};
     this.annotationService.render();
-    this.page = 1;
-    this.annotationService.setPageNumber(1);
     this.tool = 'cursor';
+
+    this.annotationService.getPageNumber().subscribe(
+      data => this.page = data
+    )
   }
 
-  ngOnChanges() {
+  ngOnDestroy() {
   }
 
   getClickedPage(event) {

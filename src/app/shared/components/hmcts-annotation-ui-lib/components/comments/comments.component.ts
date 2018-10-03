@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Renderer2, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AnnotationService } from '../../data/annotation.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
@@ -12,15 +12,11 @@ declare const PDFAnnotate: any;
   providers: []
 })
 export class CommentsComponent implements OnInit {
-  selectedAnnotationId: string;
 
+  selectedAnnotationId: string;
   annotations;
   pageNumber: number;
   subscription: Subscription;
-  
-  @ViewChild("commentList") commentList: ElementRef;
-  @ViewChild("commentForm") commentForm: ElementRef;
-  @ViewChild("commentText") commentText: ElementRef;
 
   	constructor(private annotationStoreService: AnnotationStoreService,
 				private annotationService: AnnotationService,
@@ -46,7 +42,8 @@ export class CommentsComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		//this.subscription.unsubscribe();
+		this.ref.detach();
+		this.subscription.unsubscribe();
 	}
 
 	showAllComments() {
@@ -104,7 +101,9 @@ export class CommentsComponent implements OnInit {
 		if (this.supportsComments(event)) {
 			this.selectedAnnotationId = event.getAttribute('data-pdf-annotate-id');
 			this.addHighlightedCommentStyle(this.selectedAnnotationId);
-			this.ref.detectChanges();
+			if (!this.ref['destroyed']) {
+				this.ref.detectChanges();
+			};
 		};
 	}
 

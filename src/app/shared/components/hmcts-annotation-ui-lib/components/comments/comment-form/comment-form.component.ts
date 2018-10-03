@@ -23,9 +23,7 @@ export class CommentFormComponent implements OnChanges {
   }
 
   onSubmit() {
-    this.annotationStoreService.addComment(
-			this.model,
-      function() {});
+    this.annotationStoreService.addComment(this.model);
       
     this.commentSubmitted.emit(this.model.annotationId);
     this.commentForm.reset();

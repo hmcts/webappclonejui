@@ -4,7 +4,7 @@ import {ImgViewerComponent} from './img-viewer/img-viewer.component';
 import {Viewer} from './viewer';
 import {UnsupportedViewerComponent} from './unsupported-viewer/unsupported-viewer.component';
 import {UrlFixerService} from '../url-fixer.service';
-import { AnnotationPdfViewerComponent } from '../../hmcts-annotation-ui-lib/viewer/annotation-pdf-viewer/annotation-pdf-viewer.component';
+import { AnnotationPdfViewerComponent } from '../../hmcts-annotation-ui-lib/components/annotation-pdf-viewer/annotation-pdf-viewer.component';
 import { AnnotationStoreService } from '../../hmcts-annotation-ui-lib/data/annotation-store.service';
 
 @Injectable()
@@ -51,11 +51,24 @@ export class ViewerFactoryService {
             this.annotationStoreService.fetchData(dmDocumentId).subscribe(
                 (data) => {
                     const componentRef: ComponentRef<any> = viewContainerRef.createComponent(componentFactory);
+                    componentRef.instance.annotate = annotate;
                     componentRef.instance.dmDocumentId = dmDocumentId;
                     componentRef.instance.annotationData = data;
                     componentRef.instance.url = this.urlFixer.fixDm(documentMetaData._links.binary.href, baseUrl);
                     return componentRef.instance;
             });
+
+        } else if(ViewerFactoryService.isPdf(documentMetaData.mimeType) && !annotate) {
+            const componentFactory = 
+                this.componentFactoryResolver.resolveComponentFactory(AnnotationPdfViewerComponent);
+            viewContainerRef.clear();
+
+            const dmDocumentId = ViewerFactoryService.getDocumentId(documentMetaData);
+            const componentRef: ComponentRef<any> = viewContainerRef.createComponent(componentFactory);
+            componentRef.instance.annotate = annotate;
+            componentRef.instance.dmDocumentId = dmDocumentId;
+            componentRef.instance.url = this.urlFixer.fixDm(documentMetaData._links.binary.href, baseUrl);
+            return componentRef.instance;
 
         }else{
             const componentToBuild =

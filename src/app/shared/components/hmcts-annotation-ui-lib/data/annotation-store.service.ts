@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Comment } from '../viewer/comments/comment-model';
+import { Comment } from '../components/comments/comment-model';
 import { AnnotationService } from './annotation.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ConfigService } from '../../../../config.service';
@@ -11,22 +11,49 @@ declare const PDFAnnotate: any;
 
 @Injectable()
 export class AnnotationStoreService {
+  pageNumber: number;
 
   constructor(private annotationService: AnnotationService,
               private httpClient: HttpClient,
-              private configService: ConfigService) { 
+              private configService: ConfigService) {   
   }
 
+  fetchData(dmDocumentId): Observable<any> {
+    const url = `${this.configService.config.api_base_url}/api/annotation/annotation-sets/${dmDocumentId}`;
+    return this.httpClient.get(url).pipe(
+          catchError((err) => { 
+          if( err instanceof HttpErrorResponse) {
+              switch(err.status) {
+                  case 400: {
+                      return Observable.throw(err.error);
+                  }
+                  case 404: {
+                      return this.httpClient.post(`${this.configService.config.api_base_url}/api/annotation/annotation-sets`, 
+                      {
+                        documentId: dmDocumentId, 
+                        id: uuid()
+                      }
+                    );
+                  }
+                  case 500:{
+                      return Observable.throw(new Error('Internal server error: ' + err));
+                  }
+             }
+          }
+    }));
+  };
+
   saveData() {
-    const toKeepAnnotations = this.annotationService.annotationData.annotations
-          .filter((word) => this.annotationService.pdfAdapter.data.includes(word));
+    let loadedData = this.annotationService.pdfAdapter.loadedData;
+    const toKeepAnnotations = loadedData.annotations
+          .filter((annotation) => this.annotationService.pdfAdapter.annotations.includes(annotation));
 
-    const toRemoveAnnotations = this.annotationService.annotationData.annotations
-      .filter((word) => !this.annotationService.pdfAdapter.data.includes(word));
+    const toRemoveAnnotations = loadedData.annotations
+          .filter((annotation) => !this.annotationService.pdfAdapter.annotations.includes(annotation));
 
-    this.annotationService.annotationData.annotations = toKeepAnnotations;
+    loadedData.annotations = toKeepAnnotations;
 
-    this.annotationService.annotationData.annotations.forEach(annotation => {
+    loadedData.annotations.forEach(annotation => {
       const saveAnnotation = {
         id: annotation.id,
         type: annotation.type,
@@ -37,26 +64,28 @@ export class AnnotationStoreService {
         comments: annotation.comments
       };
 
-      this.saveAnnotation(saveAnnotation).subscribe(
+      this.saveAnnotationApi(saveAnnotation).subscribe(
         response => console.log(response),
         error => console.log(error)
       );
     });
 
     toRemoveAnnotations.forEach(annotation => {
-      this.deleteAnnotation(annotation).subscribe(
+      this.deleteAnnotationApi(annotation).subscribe(
         response => console.log(response),
         error => console.log(error)
       );
     });
+
+    this.annotationService.pdfAdapter.loadedData = loadedData;
   }
 
-  deleteAnnotation(annotation): Observable<any> {
+  deleteAnnotationApi(annotation): Observable<any> {
     const url = `${this.configService.config.api_base_url}/api/annotation/annotations/${annotation.id}`;
     return this.httpClient.delete(url);
   }
 
-  saveAnnotation(annotation): Observable<any> {
+  saveAnnotationApi(annotation): Observable<any> {
     const url = `${this.configService.config.api_base_url}/api/annotation/annotations`;
     return this.httpClient.post(url, annotation);
   }
@@ -117,10 +146,10 @@ export class AnnotationStoreService {
       .then(callback);
   }
 
-  addComment(comment: Comment, callback ) {
+  addComment(comment: Comment ) {
     PDFAnnotate.getStoreAdapter()
       .addComment(this.annotationService.getRenderOptions().documentId, comment.annotationId, comment.content)
-      .then(callback);
+      .then();
   }
 
   getAnnotations(pageNumber: number, callback) {
@@ -128,29 +157,4 @@ export class AnnotationStoreService {
       .getAnnotations(this.annotationService.getRenderOptions().documentId, pageNumber)
       .then(callback);
   }
-
-  fetchData(dmDocumentId): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/annotation/annotation-sets/${dmDocumentId}`;
-    return this.httpClient.get(url).pipe(
-          catchError((err) => { 
-          if( err instanceof HttpErrorResponse) {
-              switch(err.status) {
-                  case 400: {
-                      return Observable.throw(err.error);
-                  }
-                  case 404: {
-                      return this.httpClient.post(`${this.configService.config.api_base_url}/api/annotation/annotation-sets`, 
-                      {
-                        documentId: dmDocumentId, 
-                        id: uuid()
-                      }
-                    );
-                  }
-                  case 500:{
-                      return Observable.throw(new Error('Internal server error: ' + err));
-                  }
-             }
-          }
-      }))
-    };
 }

@@ -6,8 +6,9 @@
   <div id="viewer" class="pdfViewer"></div>
 </div>
 
-<app-comments></app-comments>
+<app-comments *ngIf="annotate"></app-comments>
   
 <app-toolbar
+  *ngIf="annotate"
   [(tool)]="tool"
   ></app-toolbar>
