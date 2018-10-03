@@ -19,6 +19,7 @@ import { PdfAdapter } from '../hmcts-annotation-ui-lib/data/store-adapter';
 @NgModule({
     declarations: [
         DocumentViewerComponent,
+        AnnotationPdfViewerComponent,
         // PdfViewerComponent,
         ImgViewerComponent,
         UnsupportedViewerComponent,

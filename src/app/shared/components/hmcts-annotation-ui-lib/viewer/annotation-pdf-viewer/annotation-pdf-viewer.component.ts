@@ -17,33 +17,18 @@ export class AnnotationPdfViewerComponent implements OnInit, OnChanges {
   renderedPages: {};
   dmDocumentId: string;
   url = '';
+  annotationData: any;
   page: number;
   tool: String;
 
   @ViewChild("contentWrapper") contentWrapper: ElementRef;
 
-  constructor(private urlFixer: UrlFixerService,
-              private annotationService: AnnotationService, 
-              private route: ActivatedRoute,
+  constructor(private annotationService: AnnotationService,
               @Inject(DOCUMENT) private document: any) {
   }
 
   ngOnInit() {
-    // From resolver
-    this.route.data.subscribe((data) => {
-      // Get the case data and select a pdf to load
-      this.dmDocumentId = this.route.snapshot.params.pdf_id
-      const dmDocuments = data.caseData.documents;
-      
-      dmDocuments.forEach(dmDocument => {
-        if (dmDocument.id == this.dmDocumentId) {
-          this.url = this.urlFixer.fixDm(dmDocument._links.binary.href, "http://localhost:3000/api");
-        }
-      });
-      
-      this.annotationService.annotationData = data.annotationData;
-      this.annotationService.preRun();
-    });
+    this.annotationService.preRun(this.annotationData);
 
     this.annotationService.setRenderOptions({
       documentId: this.url,
