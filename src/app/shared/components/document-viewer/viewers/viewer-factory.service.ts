@@ -35,8 +35,8 @@ export class ViewerFactoryService {
 
 
     constructor(private componentFactoryResolver: ComponentFactoryResolver,
-                private urlFixer: UrlFixerService,
-                private annotationStoreService: AnnotationStoreService) {
+                private annotationStoreService: AnnotationStoreService,
+                private urlFixer: UrlFixerService) {
     }
 
     buildViewer(documentMetaData: any, annotate: boolean, viewContainerRef: ViewContainerRef, baseUrl: string) {
