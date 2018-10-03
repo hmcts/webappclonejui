@@ -37,6 +37,10 @@ export class ToolbarComponent implements OnInit, OnChanges {
     this.toolChange.emit(this.tool);
   }
 
+  handleClearAnnotations() {
+    this.annotationStoreService.clearAnnotations();
+  }
+
   handlePointerClick() {
     this.tool = 'cursor';
     this.toolChange.emit(this.tool);

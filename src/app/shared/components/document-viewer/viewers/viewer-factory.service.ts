@@ -1,5 +1,5 @@
 import {ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef} from '@angular/core';
-import {PdfViewerComponent} from './pdf-viewer/pdf-viewer.component';
+// import {PdfViewerComponent} from './pdf-viewer/pdf-viewer.component';
 import {ImgViewerComponent} from './img-viewer/img-viewer.component';
 import {Viewer} from './viewer';
 import {UnsupportedViewerComponent} from './unsupported-viewer/unsupported-viewer.component';
@@ -14,9 +14,9 @@ export class ViewerFactoryService {
         if (ViewerFactoryService.isImage(mimeType)) {
             return ImgViewerComponent;
         }
-        if (ViewerFactoryService.isPdf(mimeType) && !annotate) {
-            return PdfViewerComponent;
-        }
+        // if (ViewerFactoryService.isPdf(mimeType) && !annotate) {
+        //     return PdfViewerComponent;
+        // }
         return UnsupportedViewerComponent;
     }
 

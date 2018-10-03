@@ -103,15 +103,6 @@ export class AnnotationService {
     localStorage.setItem(this.RENDER_OPTIONS.documentId + '/tooltype', 'cursor');
   }
 
-  clearAnnotations() {
-    if (confirm('Are you sure you want to clear annotations?')) {
-      for (let i = 0; i < this.pdfPages; i++) {
-        document.querySelector('div#pageContainer' + (i + 1) + ' svg.annotationLayer').innerHTML = '';
-      }
-      localStorage.removeItem(this.RENDER_OPTIONS.documentId + '/annotations');
-    }
-  }
-
   setScale(scale) {
     scale = parseFloat(scale);
     if (this.RENDER_OPTIONS.scale !== scale) {
