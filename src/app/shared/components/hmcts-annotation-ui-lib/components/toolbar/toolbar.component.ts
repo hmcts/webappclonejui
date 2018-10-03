@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges, Output, EventEmitter } from '@angular/core';
 import { AnnotationService } from '../../data/annotation.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
+import { NpaService } from '../../data/npa.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,13 +12,14 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   @ViewChild("highlightTool") highlightTool: ElementRef;
   @ViewChild("pointerTool") pointerPool: ElementRef;
-  // @ViewChild("zoomTool") zoomTool: ElementRef;
 
+  @Input() dmDocumentId: string;
   @Input() tool: string;
   @Output() toolChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private annotationService: AnnotationService,
-              private annotationStoreService: AnnotationStoreService) {
+              private annotationStoreService: AnnotationStoreService,
+              private npaService: NpaService) {
   }
 
   ngOnInit() {
@@ -50,11 +52,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
     this.annotationStoreService.saveData();
   }
 
-  // handleScaleChange(event: Event) {
-  //   this.setScale(this.zoomTool.nativeElement.value)
-  // }
+  onExportClick() {
+    this.npaService.exportPdf(this.dmDocumentId);
+  }
 
-  // setScale(scale) {
-  //   this.annotationService.setScale(scale);
-  // }
 }

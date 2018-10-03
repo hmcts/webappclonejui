@@ -13,6 +13,7 @@ import {DocumentViewerService} from './document-viewer.service';
 import { AnnotationUiLibModule } from '../hmcts-annotation-ui-lib/annotation-ui-lib.module';
 import { AnnotationPdfViewerComponent } from '../hmcts-annotation-ui-lib/components/annotation-pdf-viewer/annotation-pdf-viewer.component';
 import { AnnotationService } from '../hmcts-annotation-ui-lib/data/annotation.service';
+import { NpaService } from '../hmcts-annotation-ui-lib/data/npa.service';
 import { AnnotationStoreService } from '../hmcts-annotation-ui-lib/data/annotation-store.service';
 import { PdfAdapter } from '../hmcts-annotation-ui-lib/data/store-adapter';
 
@@ -42,6 +43,7 @@ import { PdfAdapter } from '../hmcts-annotation-ui-lib/data/store-adapter';
         ViewerFactoryService,
         UrlFixerService,
         DocumentViewerService,
+        NpaService,
         AnnotationService,
         AnnotationStoreService,
         PdfAdapter

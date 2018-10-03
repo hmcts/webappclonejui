@@ -1,19 +1,19 @@
-#comment-wrapper {
+  #comment-wrapper {
     position: absolute;
-    left: 1376px;
-    top: 385px;
-    right: 0;
-    bottom: 0;
-    overflow: auto;
+    height: 100%;
     width: 210px;
-    height: 750px;
-    background: #eaeaea;
+    right: 0;
+    overflow: auto;
+    // background: #eaeaea;
     border-left: 1px solid #d0d0d0;
+    z-index: 11;
   }
+
   #comment-wrapper h4 {
     margin: 10px;
     padding-top:5px;
   }
+
   #comment-wrapper .comment-list {
     font-size: 12px;
     position: absolute;
@@ -22,9 +22,13 @@
     right: 0;
     bottom: 0;
   }
+
   #comment-wrapper .comment-list-item {
-    border-bottom: 1px solid #d0d0d0;
+    background: govuk-colour(white);
+    box-shadow: 0 4px 6px 0 govuk-colour(black);
+    box-sizing: border-box;
   }
+
   #comment-wrapper .comment-list-container {
     position: absolute;
     top: 0;
@@ -33,6 +37,7 @@
     bottom: 47px;
     overflow: auto;
   }
+
   #comment-wrapper .comment-list-form {
     position: absolute;
     left: 0;
@@ -40,6 +45,7 @@
     bottom: 0;
     padding: 10px;
   }
+  
   #comment-wrapper .comment-list-form input {
     width: 100%;
   }

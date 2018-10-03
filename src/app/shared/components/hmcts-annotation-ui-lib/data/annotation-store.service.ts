@@ -19,7 +19,7 @@ export class AnnotationStoreService {
   }
 
   fetchData(dmDocumentId): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/annotation/annotation-sets/${dmDocumentId}`;
+    const url = `${this.configService.config.api_base_url}/api/em-anno/annotation-sets/${dmDocumentId}`;
     return this.httpClient.get(url).pipe(
           catchError((err) => { 
           if( err instanceof HttpErrorResponse) {
@@ -28,7 +28,7 @@ export class AnnotationStoreService {
                       return Observable.throw(err.error);
                   }
                   case 404: {
-                      return this.httpClient.post(`${this.configService.config.api_base_url}/api/annotation/annotation-sets`, 
+                      return this.httpClient.post(`${this.configService.config.api_base_url}/api/em-anno/annotation-sets`, 
                       {
                         documentId: dmDocumentId, 
                         id: uuid()
@@ -91,12 +91,12 @@ export class AnnotationStoreService {
   }
 
   deleteAnnotationApi(annotation): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/annotation/annotations/${annotation.id}`;
+    const url = `${this.configService.config.api_base_url}/api/em-anno/annotations/${annotation.id}`;
     return this.httpClient.delete(url);
   }
 
   saveAnnotationApi(annotation): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/annotation/annotations`;
+    const url = `${this.configService.config.api_base_url}/api/em-anno/annotations`;
     return this.httpClient.post(url, annotation);
   }
 

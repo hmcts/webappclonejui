@@ -10,6 +10,7 @@ module.exports = {
         draft_store_api: 'https://draft-store-service-aat.service.core-compute-aat.internal',
         dm_store_api: 'http://dm-store-aat.service.core-compute-aat.internal',
         em_anno_api: 'https://em-anno-aat.service.core-compute-aat.internal',
+        em_npa_api: 'https://em-npa-aat.service.core-compute-aat.internal',
         em_redact_api: 'http://em-redact-aat.service.core-compute-aat.internal',
         coh_cor_api: 'http://coh-cor-aat.service.core-compute-aat.internal'
     },
