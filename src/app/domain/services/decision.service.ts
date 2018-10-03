@@ -63,7 +63,7 @@ export class DecisionService {
     }
 
     issueDecision(caseId: string, decision: any): Observable<any>  {
-        const url = this.generateDecisionUrl('fr', caseId, 'create';
+        const url = this.generateDecisionUrl('fr', caseId, 'create');
 
         const body = {
             decision_award: decision.decision_award,

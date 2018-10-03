@@ -75,7 +75,7 @@ export class CreateDecisionComponent implements OnInit {
                     );
             }
             else {
-                this.decisionService.submitDecisionDraft(this.case.id, values.decision, values.notes)
+                this.decisionService.submitDecisionDraft(this.case.id, values.decision, values.notes, null)
                     .subscribe(
                         () => this.redirectionService.redirect(`/jurisdiction/${this.case.case_jurisdiction}/casetype/${this.case.case_type_id}/viewcase/${this.case.id}/decision/check`),
                         error => this.error.server = true

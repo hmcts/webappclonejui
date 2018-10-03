@@ -188,7 +188,7 @@ export class ReasonsCoNotApprovedComponent implements OnInit {
                  private formsService: FormsService) {}
 
     ngOnInit() {
-        this.rejectReasonsForm = new FormGroup(this.formsService.defineformControls(this.fr.reject));
+        this.rejectReasonsForm = new FormGroup(this.formsService.defineformControls(this.fr.reject, {}));
     }
     onSubmit() {
         console.log("Submit=>", this.rejectReasonsForm);
