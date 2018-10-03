@@ -7,7 +7,6 @@ import { ToolbarComponent } from './viewer/toolbar/toolbar.component';
 import { AnnotationStoreService } from './data/annotation-store.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { AnnotationResolver } from './annotation-resolver/annotation-resolver';
 import { PdfAdapter } from './data/store-adapter';
 
 @NgModule({
@@ -20,8 +19,7 @@ import { PdfAdapter } from './data/store-adapter';
     CommentsComponent,
     CommentItemComponent,
     CommentFormComponent,
-    ToolbarComponent,
-    AnnotationResolver
+    ToolbarComponent
   ],
   providers: [
     AnnotationStoreService,

@@ -22,7 +22,8 @@ export class AnnotationService {
               private route: ActivatedRoute,
               public pdfAdapter: PdfAdapter) {}
   
-  preRun() {
+  preRun(annotationData) {
+      this.annotationData = annotationData;
       this.pdfAdapter.setStoreData(this.annotationData);
       PDFAnnotate.setStoreAdapter(this.pdfAdapter.getStoreAdapter());
 
