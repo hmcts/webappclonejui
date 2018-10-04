@@ -10,11 +10,20 @@ export class CaseActionAlertComponent implements OnInit {
 
     @Input() title = 'Decision needed';
     @Input() href = '#';
-    @Input() status = 'Draft consent order';
+    @Input() status;
+    state = '';
 
   constructor() { }
 
   ngOnInit() {
+      const status = this.status;
+      if (this.status.actionGoTo === 'casefile' && this.status.ID) {
+          this.href = `../${this.status.actionGoTo}/${this.status.ID}`;
+          this.state = this.status.name;
+      } else {
+          this.href = (this.status.actionGoTo);
+          this.state = this.status.name;
+      }
   }
 
 }
