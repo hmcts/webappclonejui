@@ -50,9 +50,7 @@ module.exports = {
                             isPageHeading: true,
                             classes: 'govuk-fieldset__legend--xl'
                         },
-                        hint: {
-                            text: 'Select all that apply.'
-                        },
+                        hint: { text: 'Select all that apply.' },
                         checkboxes: [
                             {
                                 control: 'partiesNeedAttend',
@@ -196,6 +194,22 @@ module.exports = {
         'notes-for-court-administrator': {
             idPrefix: 'notes-for-court-administrator',
             name: 'notes-for-court-administrator'
+        },
+        check: {
+            idPrefix: 'check',
+            name: 'check'
+        },
+        'decision-confirmation': {
+            idPrefix: 'decision-confirmation',
+            name: 'decision-confirmation'
+        },
+        'draft-consent-order': {
+            idPrefix: 'draft-consent-order',
+            name: 'draft-consent-order'
+        },
+        'hearing-details': {
+            idPrefix: 'hearing-details',
+            name: 'hearing-details'
         }
     }
 };
