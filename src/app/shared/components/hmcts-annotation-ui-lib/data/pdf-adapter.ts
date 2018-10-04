@@ -19,8 +19,8 @@ export class PdfAdapter {
         this.annotationSet = annotationSet;
         this.annotations = annotationSet.annotations;
         this.commentData = [];
-        this.annotations.forEach(annotation => {
-            annotation.comments.forEach(comment => {
+        this.annotations.forEach((annotation: Annotation) => {
+            annotation.comments.forEach((comment: Comment) => {
                 this.commentData.push(comment);
             }); 
         });
@@ -28,13 +28,10 @@ export class PdfAdapter {
     }
 
     editComment(comment: Comment) {
-        this.annotations.forEach(annotation => {
-            annotation.comments.forEach(
-            storeComment => {
-                if (storeComment.id == comment.id) {
-                    storeComment.content = comment.content;
-                };
-            })
+        this.annotations.forEach((annotation: Annotation) => {
+            annotation.comments
+                .filter(storeComment => storeComment.id == comment.id)
+                .map(storeComment => storeComment.content = comment.content);
         });
     }
 
@@ -54,7 +51,7 @@ export class PdfAdapter {
         
         const getAnnotations = (documentId, pageNumber) => {
             return new Promise((resolve, reject) => {
-                var annotations = this._getAnnotations(documentId).filter(function (i) {
+                const annotations = this._getAnnotations(documentId).filter(function (i) {
                     return i.page === pageNumber;
                   });
                 resolve({
@@ -78,8 +75,6 @@ export class PdfAdapter {
                 resolve(this.data.comments);
             });
         };
-
-
 
         const addAnnotation = (documentId, pageNumber, annotation) => {
             return new Promise((resolve, reject) => {

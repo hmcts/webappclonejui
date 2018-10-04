@@ -22,7 +22,6 @@ export class CommentsComponent implements OnInit {
 				private pdfService: PdfService,
 				private render: Renderer2, 
 				private ref: ChangeDetectorRef) { 
-			
 	}
 
   	ngOnInit() {
@@ -37,7 +36,6 @@ export class CommentsComponent implements OnInit {
 	  };
 
 	ngAfterViewInit() {
-		// todo - replace this with (click) command from parent object
 		document.querySelector('#viewer').addEventListener('click', this.handleAnnotationBlur.bind(this));
 		PDFAnnotate.UI.addEventListener('annotation:click', this.handleAnnotationClick.bind(this));
 	}
@@ -113,9 +111,7 @@ export class CommentsComponent implements OnInit {
 	}
 
 	addHighlightedCommentStyle(linkedAnnotationId) {
-		// todo - refactor using JUI concat ``
-		const idPageSelector = '#pageContainer' + this.pageNumber;
-		const annotations = Array.from(document.querySelector(idPageSelector+' .annotationLayer').childNodes);
+		const annotations = Array.from(document.querySelector(`#pageContainer${this.pageNumber} .annotationLayer`).childNodes);
 
 		annotations.forEach(annotation => {
 			this.render.removeClass(annotation,"comment-selected");
