@@ -47,7 +47,7 @@ export class CheckDecisionComponent implements OnInit, JUIFormInterface {
         this.decision = this.route.parent.snapshot.data['decision'];
         this.options = this.case.decision.options;
 
-        this.decisionService.fetch(this.case.id).subscribe(decision => {
+        this.decisionService.fetch('', this.case.id,'').subscribe(decision => {
             this.decision = decision;
             this.decisionAward = this.options
                 .filter(option => option.id === this.decision.decision_award)

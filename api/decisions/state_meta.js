@@ -39,8 +39,8 @@ module.exports = {
             ]
         },
         'reject-reasons':  {
-            idPrefix: 'reject',
-            name: 'reject',
+            idPrefix: 'reject-reasons',
+            name: 'reject-reasons',
             header: 'What should appear in the directions order?',
             groups: [
                 {
@@ -171,24 +171,25 @@ module.exports = {
                             control: 'includeAnnotatedVersionDraftConsOrder',
                             radioGroup: [
                                 {
-                                    value: 'Yes',
+                                    value: 'yes',
                                     text: 'Yes',
                                     hiddenAccessibilityText: ', send an annotated version of the draft consent order to the parties'
                                 },
                                 {
-                                    value: 'Maybe',
-                                    text: 'May be',
-                                    hiddenAccessibilityText: 'Dummy for test reason',
-                                    checked: true
-                                },
-                                {
-                                    value: 'No',
+                                    value: 'no',
                                     text: 'No',
                                     hiddenAccessibilityText: ', I don’t want to send an annotated version of the draft consent order to the parties'
                                 }
                             ]
                         }
                     }
+                }
+            ],
+            buttons: [
+                {
+                    control: 'createButton',
+                    value: 'Continue',
+                    onEvent: 'continue'
                 }
             ]
         },
