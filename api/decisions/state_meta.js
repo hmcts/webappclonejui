@@ -194,9 +194,21 @@ module.exports = {
             idPrefix: 'notes-for-court-administrator',
             name: 'notes-for-court-administrator'
         },
-        'check': {
+        check: {
             idPrefix: 'check',
             name: 'check'
+        },
+        'decision-confirmation': {
+            idPrefix: 'decision-confirmation',
+            name: 'decision-confirmation'
+        },
+        'draft-consent-order': {
+            idPrefix: 'draft-consent-order',
+            name: 'draft-consent-order'
+        },
+        'hearing-details': {
+            idPrefix: 'hearing-details',
+            name: 'hearing-details'
         }
     }
 };
