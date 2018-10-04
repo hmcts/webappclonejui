@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { PdfAdapter } from './store-adapter';
 
 declare const PDFJS: any;
 declare const PDFAnnotate: any;
 
 @Injectable()
-export class AnnotationService {
+export class PdfService {
 
   PAGE_HEIGHT;
   UI;
@@ -15,28 +14,15 @@ export class AnnotationService {
   private pageNumber: Subject<number>;
   pdfPages: number;
 
-  constructor(public pdfAdapter: PdfAdapter) {
+  constructor() {
   }
   
-  preRun(annotationData) {
-      this.pdfAdapter.setStoreData(annotationData);
-      PDFAnnotate.setStoreAdapter(this.pdfAdapter.getStoreAdapter());
-
+  preRun() {
       this.PAGE_HEIGHT = void 0;
       this.UI = PDFAnnotate.UI;
 
       this.pageNumber = new Subject();
       this.pageNumber.next(1);
-  }
-
-  preRunNoAnnotations() {
-    PDFAnnotate.setStoreAdapter(new PDFAnnotate.LocalStoreAdapter());
-
-    this.PAGE_HEIGHT = void 0;
-    this.UI = PDFAnnotate.UI;
-
-    this.pageNumber = new Subject();
-    this.pageNumber.next(1);
   }
 
   getPageNumber(): Subject<number> {

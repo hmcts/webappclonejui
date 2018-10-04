@@ -1,24 +1,24 @@
 import { v4 as uuid } from 'uuid';
-import { Comment } from '../components/comments/comment-model';
+import { AnnotationSet, Annotation, Comment, Rectangle } from './annotation-set.model';
 
 declare const PDFAnnotate: any;
 
 export class PdfAdapter {
-    loadedData: any;
-    annotations: any;
-    commentData: any[];
-    annotationSetId: number;
+    annotationSet: AnnotationSet;
+    annotations: Annotation[];
+    commentData: Comment[];
+    annotationSetId: string;
 
-    setStoreData(data) {
-        this.loadedData = data;
-        this.annotations = data.annotations;
+    setStoreData(annotationSet: AnnotationSet) {
+        this.annotationSet = annotationSet;
+        this.annotations = annotationSet.annotations;
         this.commentData = [];
         this.annotations.forEach(annotation => {
             annotation.comments.forEach(comment => {
                 this.commentData.push(comment);
             }); 
         });
-        this.annotationSetId = data.id;
+        this.annotationSetId = annotationSet.id;
     }
 
     editComment(comment: Comment) {
@@ -79,7 +79,7 @@ export class PdfAdapter {
                 annotation.page = pageNumber;
                 annotation.annotationSetId = this.annotationSetId;
                 annotation.rectangles.forEach(
-                    rectangle => {
+                    (rectangle: Rectangle) => {
                       rectangle.id = uuid();
                     });
 
@@ -99,8 +99,8 @@ export class PdfAdapter {
 
         let addComment = (documentId, annotationId, content) => {
             return new Promise((resolve, reject) => {
-                var comment = {
-                    class: 'Comment',
+                // let comment: Comment;
+                let comment = {
                     id: uuid(),
                     annotationId: annotationId,
                     content: content,
@@ -116,7 +116,7 @@ export class PdfAdapter {
         let deleteComment = (documentId, commentId) => {
             return new Promise((resolve, reject) => {
                 this.commentData = this.remove(this.commentData, commentId);
-                resolve(this.annotations.comments);
+                resolve(this.annotations);
             });
         };
 

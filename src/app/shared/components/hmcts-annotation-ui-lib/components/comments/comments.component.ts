@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AnnotationService } from '../../data/annotation.service';
+import { PdfService } from '../../data/pdf.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
 
 declare const PDFAnnotate: any;
@@ -19,7 +19,7 @@ export class CommentsComponent implements OnInit {
   subscription: Subscription;
 
   	constructor(private annotationStoreService: AnnotationStoreService,
-				private annotationService: AnnotationService,
+				private pdfService: PdfService,
 				private render: Renderer2, 
 				private ref: ChangeDetectorRef) { 
 			
@@ -29,7 +29,7 @@ export class CommentsComponent implements OnInit {
 		this.pageNumber = 1;
 		this.showAllComments();
 
-		this.subscription = this.annotationService.getPageNumber().subscribe(
+		this.subscription = this.pdfService.getPageNumber().subscribe(
 			pageNumber => {
 				this.pageNumber = pageNumber;
 				this.showAllComments();
@@ -92,14 +92,14 @@ export class CommentsComponent implements OnInit {
 	}
 
 	handleAnnotationBlur() {
-			this.selectedAnnotationId = null;
-			this.showAllComments();
-			this.addHighlightedCommentStyle(null);
+		this.selectedAnnotationId = null;
+		this.showAllComments();
+		this.addHighlightedCommentStyle(null);
 	}
 
 	supportsComments(target) {
 		var type = target.getAttribute('data-pdf-annotate-type');
-		return ['point', 'highlight', 'area'].indexOf(type) > -1;
+		return ['point', 'highlight'].indexOf(type) > -1;
 	}
 
 	handleAnnotationClick(event) {

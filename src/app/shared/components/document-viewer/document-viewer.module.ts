@@ -4,7 +4,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {ViewerFactoryService} from './viewers/viewer-factory.service';
-// import {PdfViewerComponent} from './viewers/pdf-viewer/pdf-viewer.component';
 import {UnsupportedViewerComponent} from './viewers/unsupported-viewer/unsupported-viewer.component';
 import {ImgViewerComponent} from './viewers/img-viewer/img-viewer.component';
 import {ViewerAnchorDirective} from './viewers/viewer-anchor.directive';
@@ -12,22 +11,15 @@ import {UrlFixerService} from './url-fixer.service';
 import {DocumentViewerService} from './document-viewer.service';
 import { AnnotationUiLibModule } from '../hmcts-annotation-ui-lib/annotation-ui-lib.module';
 import { AnnotationPdfViewerComponent } from '../hmcts-annotation-ui-lib/components/annotation-pdf-viewer/annotation-pdf-viewer.component';
-import { AnnotationService } from '../hmcts-annotation-ui-lib/data/annotation.service';
-import { NpaService } from '../hmcts-annotation-ui-lib/data/npa.service';
-import { AnnotationStoreService } from '../hmcts-annotation-ui-lib/data/annotation-store.service';
-import { PdfAdapter } from '../hmcts-annotation-ui-lib/data/store-adapter';
 
 @NgModule({
     declarations: [
         DocumentViewerComponent,
-        AnnotationPdfViewerComponent,
-        // PdfViewerComponent,
         ImgViewerComponent,
         UnsupportedViewerComponent,
         ViewerAnchorDirective
     ],
     entryComponents: [
-        // PdfViewerComponent,
         AnnotationPdfViewerComponent,
         ImgViewerComponent,
         UnsupportedViewerComponent
@@ -42,11 +34,7 @@ import { PdfAdapter } from '../hmcts-annotation-ui-lib/data/store-adapter';
     providers: [
         ViewerFactoryService,
         UrlFixerService,
-        DocumentViewerService,
-        NpaService,
-        AnnotationService,
-        AnnotationStoreService,
-        PdfAdapter
+        DocumentViewerService
     ],
 })
 export class DocumentViewerModule {

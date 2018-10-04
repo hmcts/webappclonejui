@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { AnnotationService } from '../../data/annotation.service';
+import { PdfService } from '../../data/pdf.service';
+import { AnnotationStoreService } from '../../data/annotation-store.service';
+import { IAnnotationSet } from '../../data/annotation-set.model';
 
 @Component({
   selector: 'app-annotation-pdf-viewer',
@@ -15,23 +17,26 @@ export class AnnotationPdfViewerComponent implements OnInit {
   page: number;
   dmDocumentId: string;
   url = '';
-  annotationData: any;
   tool: String;
+  annotationSet: IAnnotationSet;
 
   @ViewChild("contentWrapper") contentWrapper: ElementRef;
 
-  constructor(private annotationService: AnnotationService,
+  constructor(private pdfService: PdfService,
+              private annotationStoreService: AnnotationStoreService,
               @Inject(DOCUMENT) private document: any) {
   }
 
   ngOnInit() {
     if (this.annotate) {
-      this.annotationService.preRun(this.annotationData);
+      this.annotationStoreService.preLoad(this.annotationSet);
     } else {
-      this.annotationService.preRunNoAnnotations();
+      this.annotationStoreService.preLoad(null);
     }
 
-    this.annotationService.setRenderOptions({
+    this.pdfService.preRun();
+
+    this.pdfService.setRenderOptions({
       documentId: this.url,
       pdfDocument: null,
       scale: parseFloat("1.33"),
@@ -39,10 +44,10 @@ export class AnnotationPdfViewerComponent implements OnInit {
     });
 
     this.renderedPages = {};
-    this.annotationService.render();
+    this.pdfService.render();
     this.tool = 'cursor';
 
-    this.annotationService.getPageNumber().subscribe(
+    this.pdfService.getPageNumber().subscribe(
       data => this.page = data
     )
   }
@@ -53,7 +58,7 @@ export class AnnotationPdfViewerComponent implements OnInit {
       if(currentParent.parentNode != null) {
         const pageNumber = currentParent.parentNode.getAttribute('data-page-number');
         if (pageNumber != null) {
-          this.annotationService.setPageNumber(parseInt(pageNumber));
+          this.pdfService.setPageNumber(parseInt(pageNumber));
           break;
         };
       currentParent = currentParent.parentNode;
@@ -71,12 +76,12 @@ export class AnnotationPdfViewerComponent implements OnInit {
 		if (visiblePage && !this.renderedPages[visiblePageNum]) {
 			// Prevent invoking UI.renderPage on the same page more than once.
         this.renderedPages[visiblePageNum] = true;
-        setTimeout(this.annotationService.renderPage(visiblePageNum));
+        setTimeout(this.pdfService.renderPage(visiblePageNum));
     }
     if (this.page != visiblePageNum) {
       this.page = visiblePageNum;
       if (!isNaN(visiblePageNum)) {
-        this.annotationService.setPageNumber(visiblePageNum);
+        this.pdfService.setPageNumber(visiblePageNum);
       }
     }
   }

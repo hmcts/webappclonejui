@@ -6,9 +6,11 @@ import { CommentsComponent } from './components/comments/comments.component';
 import { CommentItemComponent } from './components/comments/comment-item/comment-item.component';
 import { CommentFormComponent } from './components/comments/comment-form/comment-form.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { AnnotationStoreService } from './data/annotation-store.service';
-import { PdfAdapter } from './data/store-adapter';
+import { PdfAdapter } from './data/pdf-adapter';
 import { NpaService } from './data/npa.service';
+import { PdfService } from './data/pdf.service';
+import { AnnotationStoreService } from './data/annotation-store.service';
+import { AnnotationPdfViewerComponent } from './components/annotation-pdf-viewer/annotation-pdf-viewer.component';
 
 @NgModule({
   imports: [
@@ -21,15 +23,15 @@ import { NpaService } from './data/npa.service';
     CommentItemComponent,
     CommentFormComponent,
     ToolbarComponent,
+    AnnotationPdfViewerComponent
   ],
   providers: [
+    PdfService,
     AnnotationStoreService,
     PdfAdapter,
     NpaService
   ],
   exports: [
-    ToolbarComponent,
-    CommentsComponent
   ]
 })
 export class AnnotationUiLibModule { }
