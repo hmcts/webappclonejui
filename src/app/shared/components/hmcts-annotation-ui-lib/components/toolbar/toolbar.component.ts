@@ -2,6 +2,8 @@ import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges, Output, Eve
 import { AnnotationService } from '../../data/annotation.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
 import { NpaService } from '../../data/npa.service';
+import {IDocumentTask} from "../../data/document-task.model";
+import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-toolbar',
@@ -16,6 +18,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Input() dmDocumentId: string;
   @Input() tool: string;
   @Output() toolChange: EventEmitter<string> = new EventEmitter<string>();
+  outputDocumentId: string;
 
   constructor(private annotationService: AnnotationService,
               private annotationStoreService: AnnotationStoreService,
@@ -27,7 +30,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.tool == 'cursor') {
+    if (this.tool === 'cursor') {
       this.annotationService.setCursorTool();
     } else {
       this.annotationService.setHighlightTool();
@@ -53,7 +56,10 @@ export class ToolbarComponent implements OnInit, OnChanges {
   }
 
   onExportClick() {
-    this.npaService.exportPdf(this.dmDocumentId);
+    this.npaService.exportPdf(this.dmDocumentId).subscribe(
+    (res: HttpResponse<IDocumentTask>) => this.outputDocumentId = res.body.outputDocumentId,
+    (res: HttpErrorResponse) => this.outputDocumentId = res.error
+    );
   }
 
 }
