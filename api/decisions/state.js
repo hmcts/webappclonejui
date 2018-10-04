@@ -15,12 +15,26 @@ function handlePostState(req, res, responseJSON, theState) {
     }
 
     if (req.body.event === 'continue') {
-        if (theState.inStateId === 'create') {
+        switch (theState.inStateId)  {
+        case 'create':
             if (formValues.approveDraftConsent === 'yes') {
-                responseJSON.newRoute = 'notes-for-court-administrator';
+                responseJSON.newRoute = 'notes-for-court-administrator'
             } else {
-                responseJSON.newRoute = 'reject-reasons';
+                responseJSON.newRoute = 'reject-reasons'
             }
+            break;
+        case 'notes-for-court-administrator':
+            responseJSON.newRoute = 'check'
+            break;
+        case 'check':
+            responseJSON.newRoute = 'decision-confirmation'
+            break;
+        default:
+            break;
+        }
+
+        // update meta data according to newly selected state
+        if (responseJSON.newRoute) {
             responseJSON.meta = stateMeta[theState.inJurisdiction][responseJSON.newRoute];
         }
     }
