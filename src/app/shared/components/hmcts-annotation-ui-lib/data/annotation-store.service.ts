@@ -1,170 +1,170 @@
 import { Injectable } from '@angular/core';
-import { Comment } from '../components/comments/comment-model';
-import { AnnotationService } from './annotation.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ConfigService } from '../../../../config.service';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { PdfService } from './pdf.service';
+import { ConfigService } from '../../../../config.service';
 import { v4 as uuid } from 'uuid';
+import { Annotation, Comment, IAnnotation, IAnnotationSet } from './annotation-set.model';
+import { PdfAdapter } from './pdf-adapter';
 
 declare const PDFAnnotate: any;
 
 @Injectable()
 export class AnnotationStoreService {
-  pageNumber: number;
 
-  constructor(private annotationService: AnnotationService,
+  constructor(private pdfAdapter: PdfAdapter,
+              private pdfService: PdfService,
               private httpClient: HttpClient,
               private configService: ConfigService) {   
   }
 
-  fetchData(dmDocumentId): Observable<any> {
+  preLoad(annotationData: IAnnotationSet) {
+    if(annotationData != null) {
+      this.pdfAdapter.setStoreData(annotationData);
+      PDFAnnotate.setStoreAdapter(this.pdfAdapter.getStoreAdapter());
+    }else{
+      PDFAnnotate.setStoreAdapter(new PDFAnnotate.LocalStoreAdapter());
+    }
+  }
+
+  fetchData(dmDocumentId): Observable<HttpResponse<IAnnotationSet>> {
     const url = `${this.configService.config.api_base_url}/api/em-anno/annotation-sets/${dmDocumentId}`;
-    return this.httpClient.get(url).pipe(
+    return this.httpClient.get<IAnnotationSet>(url, { observe: 'response'}).pipe(
           catchError((err) => { 
-          if( err instanceof HttpErrorResponse) {
+          if( err instanceof HttpErrorResponse ) {
               switch(err.status) {
                   case 400: {
                       return Observable.throw(err.error);
                   }
                   case 404: {
-                      return this.httpClient.post(`${this.configService.config.api_base_url}/api/em-anno/annotation-sets`, 
+                      return this.httpClient.post<IAnnotationSet>(`${this.configService.config.api_base_url}/api/em-anno/annotation-sets`, 
                       {
                         documentId: dmDocumentId, 
                         id: uuid()
-                      }
+                      }, { observe: 'response'}
                     );
                   }
                   case 500:{
                       return Observable.throw(new Error('Internal server error: ' + err));
                   }
-             }
-          }
+             };
+          };
     }));
   };
 
+  deleteAnnotationApi(annotation: Annotation): Observable<HttpResponse<IAnnotation>> {
+    const url = `${this.configService.config.api_base_url}/api/em-anno/annotations/${annotation.id}`;
+    return this.httpClient.delete<IAnnotation>(url, { observe: 'response' });
+  }
+
+  saveAnnotationApi(annotation: Annotation): Observable<HttpResponse<IAnnotation>> {
+    const url = `${this.configService.config.api_base_url}/api/em-anno/annotations`;
+    return this.httpClient.post<IAnnotation>(url, annotation, { observe: 'response' });
+  }
+
   saveData() {
-    let loadedData = this.annotationService.pdfAdapter.loadedData;
-    const toKeepAnnotations = loadedData.annotations
-          .filter((annotation) => this.annotationService.pdfAdapter.annotations.includes(annotation));
+    let loadedData: IAnnotationSet;
+    let tempAnnotations: IAnnotation[];
+    let toKeepAnnotations: IAnnotation[];
+    let toRemoveAnnotations: IAnnotation[];
 
-    const toRemoveAnnotations = loadedData.annotations
-          .filter((annotation) => !this.annotationService.pdfAdapter.annotations.includes(annotation));
+    loadedData = this.pdfAdapter.annotationSet;
+    tempAnnotations = loadedData.annotations;
 
-    loadedData.annotations = toKeepAnnotations;
+    toKeepAnnotations = tempAnnotations
+          .filter((annotation: IAnnotation) => this.pdfAdapter.annotations.includes(annotation));
 
-    loadedData.annotations.forEach(annotation => {
-      const saveAnnotation = {
-        id: annotation.id,
-        type: annotation.type,
-        rectangles: annotation.rectangles,
-        color: annotation.color,
-        page: annotation.page,
-        annotationSetId: annotation.annotationSetId,
-        comments: annotation.comments
-      };
+    toRemoveAnnotations = tempAnnotations
+          .filter((annotation: IAnnotation) => !this.pdfAdapter.annotations.includes(annotation));
 
-      this.saveAnnotationApi(saveAnnotation).subscribe(
+    tempAnnotations = toKeepAnnotations;
+
+    tempAnnotations.forEach((annotation: Annotation) => {
+      this.saveAnnotationApi(annotation).subscribe(
         response => console.log(response),
         error => console.log(error)
       );
     });
 
-    toRemoveAnnotations.forEach(annotation => {
+    toRemoveAnnotations.forEach((annotation: Annotation) => {
       this.deleteAnnotationApi(annotation).subscribe(
         response => console.log(response),
         error => console.log(error)
       );
     });
 
-    this.annotationService.pdfAdapter.loadedData = loadedData;
+    this.pdfAdapter.annotationSet = loadedData;
   }
 
   clearAnnotations() {
     if (confirm('Are you sure you want to clear annotations?')) {
-      this.annotationService.pdfAdapter.annotations = [];
-      // for (let i = 0; i < this.pdfPages; i++) {
-      //   document.querySelector('div#pageContainer' + (i + 1) + ' svg.annotationLayer').innerHTML = '';
-      // }
-      // localStorage.removeItem(this.RENDER_OPTIONS.documentId + '/annotations');
+      this.pdfAdapter.annotations = [];
+      this.pdfService.render();
     }
   }
 
-  deleteAnnotationApi(annotation): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/em-anno/annotations/${annotation.id}`;
-    return this.httpClient.delete(url);
-  }
-
-  saveAnnotationApi(annotation): Observable<any> {
-    const url = `${this.configService.config.api_base_url}/api/em-anno/annotations`;
-    return this.httpClient.post(url, annotation);
-  }
-
-  deleteComment(commentId: string) {
-    PDFAnnotate.getStoreAdapter()
-      .deleteComment(this.annotationService.getRenderOptions().documentId, commentId)
-      .then();
-  }
-  
   editComment(comment: Comment){
-      this.annotationService.pdfAdapter.editComment(comment);
+      this.pdfAdapter.editComment(comment);
   }
 
-  getAnnotationById(annotationId: any): any {
-		let promise = new Promise((resolve, error) => {
+  getAnnotationById(annotationId: string): Promise<Annotation> {
+		return new Promise<Annotation>((resolve) => {
       this.getAnnotation(
         annotationId, 
         annotation => {
           resolve(annotation);
         })
-      }
-    );
-    return promise;
+      });
 	}
 
-  getAnnotationsForPage(pageNumber) {
-    let promise = new Promise((resolve, error) => {
-      this.getAnnotations(pageNumber,
+  getAnnotationsForPage(pageNumber): Promise<Annotation[]> {
+    return new Promise<Annotation[]>((resolve) => {
+      this.getAnnotations(
+        pageNumber,
         pageData => {
           resolve(pageData);
         })
     });
-    return promise;
   }
 
-  getCommentsForAnnotation(annotationId) {
-    let promise = new Promise((resolve, error) => {
+  getCommentsForAnnotation(annotationId): Promise<Comment[]> {
+    return new Promise<Comment[]>((resolve) => {
       this.getComments(
         annotationId, 
         comments => {
           resolve(comments);
-        }
-      );
+        });
     });
-    return promise;
   }
 
   getAnnotation(annotationId: string, callback) {
     PDFAnnotate.getStoreAdapter()
-      .getAnnotation(this.annotationService.getRenderOptions().documentId, annotationId)
+      .getAnnotation(this.pdfService.getRenderOptions().documentId, annotationId)
       .then(callback);
   }
 
   getComments(annotationId: string, callback) {
     PDFAnnotate.getStoreAdapter()
-      .getComments(this.annotationService.getRenderOptions().documentId, annotationId)
+      .getComments(this.pdfService.getRenderOptions().documentId, annotationId)
       .then(callback);
   }
 
   addComment(comment: Comment ) {
     PDFAnnotate.getStoreAdapter()
-      .addComment(this.annotationService.getRenderOptions().documentId, comment.annotationId, comment.content)
+      .addComment(this.pdfService.getRenderOptions().documentId, comment.annotationId, comment.content)
       .then();
   }
 
   getAnnotations(pageNumber: number, callback) {
     PDFAnnotate.getStoreAdapter()
-      .getAnnotations(this.annotationService.getRenderOptions().documentId, pageNumber)
+      .getAnnotations(this.pdfService.getRenderOptions().documentId, pageNumber)
       .then(callback);
+  }
+
+  deleteComment(commentId: string) {
+    PDFAnnotate.getStoreAdapter()
+      .deleteComment(this.pdfService.getRenderOptions().documentId, commentId)
+      .then();
   }
 }

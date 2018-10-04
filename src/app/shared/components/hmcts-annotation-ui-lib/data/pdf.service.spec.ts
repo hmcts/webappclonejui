@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { AnnotationService } from './annotation.service';
+import { PdfService } from './pdf.service';
 
 describe('AnnotationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AnnotationService]
+      providers: [PdfService]
     });
   });
 
-  it('should be created', inject([AnnotationService], (service: AnnotationService) => {
+  it('should be created', inject([PdfService], (service: PdfService) => {
     expect(service).toBeTruthy();
   }));
 });

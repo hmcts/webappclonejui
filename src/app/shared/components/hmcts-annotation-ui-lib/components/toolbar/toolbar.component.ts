@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges, Output, EventEmitter } from '@angular/core';
-import { AnnotationService } from '../../data/annotation.service';
+import { PdfService } from '../../data/pdf.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
 import { NpaService } from '../../data/npa.service';
 import {IDocumentTask} from "../../data/document-task.model";
@@ -18,9 +18,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Input() dmDocumentId: string;
   @Input() tool: string;
   @Output() toolChange: EventEmitter<string> = new EventEmitter<string>();
-  outputDocumentId: string;
 
-  constructor(private annotationService: AnnotationService,
+  constructor(private pdfService: PdfService,
               private annotationStoreService: AnnotationStoreService,
               private npaService: NpaService) {
   }
@@ -31,9 +30,9 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.tool === 'cursor') {
-      this.annotationService.setCursorTool();
+      this.pdfService.setCursorTool();
     } else {
-      this.annotationService.setHighlightTool();
+      this.pdfService.setHighlightTool();
     }
   }
 
@@ -57,8 +56,8 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   onExportClick() {
     this.npaService.exportPdf(this.dmDocumentId).subscribe(
-    (res: HttpResponse<IDocumentTask>) => this.outputDocumentId = res.body.outputDocumentId,
-    (res: HttpErrorResponse) => this.outputDocumentId = res.error
+    (res: HttpResponse<IDocumentTask>) => this.npaService.documentTask.next(res.body),
+    (res: HttpErrorResponse) => this.npaService.documentTask = res.error
     );
   }
 

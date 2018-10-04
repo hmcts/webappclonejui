@@ -1,24 +1,30 @@
 import { v4 as uuid } from 'uuid';
-import { Comment } from '../components/comments/comment-model';
+import { AnnotationSet, Annotation, Comment, Rectangle } from './annotation-set.model';
+import { Utils } from './utils';
+import { Injectable } from '@angular/core';
 
 declare const PDFAnnotate: any;
 
+@Injectable()
 export class PdfAdapter {
-    loadedData: any;
-    annotations: any;
-    commentData: any[];
-    annotationSetId: number;
+    annotationSet: AnnotationSet;
+    annotations: Annotation[];
+    commentData: Comment[];
+    annotationSetId: string;
 
-    setStoreData(data) {
-        this.loadedData = data;
-        this.annotations = data.annotations;
+    constructor(private utils: Utils) {
+    }
+
+    setStoreData(annotationSet: AnnotationSet) {
+        this.annotationSet = annotationSet;
+        this.annotations = annotationSet.annotations;
         this.commentData = [];
         this.annotations.forEach(annotation => {
             annotation.comments.forEach(comment => {
                 this.commentData.push(comment);
             }); 
         });
-        this.annotationSetId = data.id;
+        this.annotationSetId = annotationSet.id;
     }
 
     editComment(comment: Comment) {
@@ -46,7 +52,7 @@ export class PdfAdapter {
 
     getStoreAdapter() {
         
-        let getAnnotations = (documentId, pageNumber) => {
+        const getAnnotations = (documentId, pageNumber) => {
             return new Promise((resolve, reject) => {
                 var annotations = this._getAnnotations(documentId).filter(function (i) {
                     return i.page === pageNumber;
@@ -59,7 +65,7 @@ export class PdfAdapter {
             }); 
         };
 
-        let getComments = (documentId, annotationId) => {
+        const getComments = (documentId, annotationId) => {
             return new Promise((resolve, reject) => {
                 resolve(this._getComments(documentId).filter(function (i) {
                     return i.annotationId === annotationId;
@@ -67,22 +73,30 @@ export class PdfAdapter {
             });
         };
 
-        let getAnnotation = (documentId, annotationId) => {
+        const getAnnotation = (documentId, annotationId) => {
             return new Promise(function(resolve, reject) {
                 resolve(this.data.comments);
             });
         };
 
-        let addAnnotation = (documentId, pageNumber, annotation) => {
+
+
+        const addAnnotation = (documentId, pageNumber, annotation) => {
             return new Promise((resolve, reject) => {
                 annotation.id = uuid();
                 annotation.page = pageNumber;
                 annotation.annotationSetId = this.annotationSetId;
-                annotation.rectangles.forEach(
-                    rectangle => {
+
+                let rectangles = [];
+                this.utils.generateRectanglePerLine(annotation.rectangles, rectangles);
+
+                rectangles.forEach(
+                    (rectangle: Rectangle) => {
                       rectangle.id = uuid();
                     });
 
+                annotation.rectangles = rectangles;
+                
                 let annotations = this._getAnnotations(documentId);
                 annotations.push(annotation);
       
@@ -90,17 +104,17 @@ export class PdfAdapter {
             });
         };
 
-        let deleteAnnotation = (documentId, annotationId) => {
+        const deleteAnnotation = (documentId, annotationId) => {
             return new Promise((resolve, reject) => {
                 this.annotations = this.remove(this.annotations, annotationId);
                 resolve(this.annotations);
             });
         };
 
-        let addComment = (documentId, annotationId, content) => {
+        const addComment = (documentId, annotationId, content) => {
             return new Promise((resolve, reject) => {
-                var comment = {
-                    class: 'Comment',
+                // let comment: Comment;
+                let comment = {
                     id: uuid(),
                     annotationId: annotationId,
                     content: content,
@@ -113,15 +127,15 @@ export class PdfAdapter {
             });
         };
 
-        let deleteComment = (documentId, commentId) => {
+        const deleteComment = (documentId, commentId) => {
             return new Promise((resolve, reject) => {
                 this.commentData = this.remove(this.commentData, commentId);
-                resolve(this.annotations.comments);
+                resolve(this.annotations);
             });
         };
 
         // Unused
-        let editAnnotation = (documentId, pageNumber, annotation) => {
+        const editAnnotation = (documentId, pageNumber, annotation) => {
             return new Promise(function(resolve, reject) {
                 resolve(this.data.comments);
             });

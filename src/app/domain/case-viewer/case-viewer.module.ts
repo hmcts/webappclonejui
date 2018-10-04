@@ -11,7 +11,6 @@ import { DocumentViewerModule } from '../../shared/components/document-viewer/do
 import { RouterModule } from '@angular/router';
 import {HmctsModule} from '../../hmcts/hmcts.module';
 import {GovukModule} from '../../govuk/govuk.module';
-import { AnnotationUiLibModule } from '../../shared/components/hmcts-annotation-ui-lib/annotation-ui-lib.module';
 import { FormsModule }   from '@angular/forms';
 
 
@@ -23,8 +22,7 @@ import { FormsModule }   from '@angular/forms';
         RouterModule,
         HmctsModule,
         GovukModule,
-        FormsModule,
-        AnnotationUiLibModule
+        FormsModule
     ],
     exports: [
         CaseViewerComponent,

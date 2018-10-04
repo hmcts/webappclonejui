@@ -28,6 +28,7 @@ export class CommentFormComponent implements OnChanges {
     this.commentSubmitted.emit(this.model.annotationId);
     this.commentForm.reset();
     this.model = new Comment(null, null, null, null, null, null, null);
+    this.selectedAnnotationId = null;
   }
 
   get diagnostic() { return JSON.stringify(this.model); }
