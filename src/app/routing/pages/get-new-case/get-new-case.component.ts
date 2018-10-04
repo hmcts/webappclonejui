@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CaseService} from '../../../domain/services/case.service';
 import {FormGroup, FormControl} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'get-new-case',
