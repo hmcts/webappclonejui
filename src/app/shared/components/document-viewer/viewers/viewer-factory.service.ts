@@ -38,11 +38,13 @@ export class ViewerFactoryService {
         viewContainerRef.clear();
         const componentFactory = 
             this.componentFactoryResolver.resolveComponentFactory(AnnotationPdfViewerComponent);
+
         const componentRef: ComponentRef<any> = viewContainerRef.createComponent(componentFactory);
         componentRef.instance.annotate = annotate;
         componentRef.instance.annotationSet = annotationSet;
         componentRef.instance.dmDocumentId = ViewerFactoryService.getDocumentId(documentMetaData);
         componentRef.instance.outputDmDocumentId = null; // '4fbdde23-e9a7-4843-b6c0-24d5bf2140ab';
+        componentRef.instance.baseUrl = baseUrl;
         componentRef.instance.url = this.urlFixer.fixDm(documentMetaData._links.binary.href, baseUrl);
 
         return componentRef.instance;
@@ -64,7 +66,7 @@ export class ViewerFactoryService {
                 
             const dmDocumentId = ViewerFactoryService.getDocumentId(documentMetaData);
 
-            this.annotationStoreService.fetchData(dmDocumentId).subscribe((response) => {
+            this.annotationStoreService.fetchData(baseUrl, dmDocumentId).subscribe((response) => {
                 return this.buildAnnotateUi(documentMetaData, viewContainerRef, baseUrl, annotate, response.body);
             });
 

@@ -4,6 +4,7 @@ import { PdfService } from '../../data/pdf.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
 import { IAnnotationSet } from '../../data/annotation-set.model';
 import { NpaService } from '../../data/npa.service';
+import { ApiHttpService } from '../../data/api-http.service';
 
 @Component({
   selector: 'app-annotation-pdf-viewer',
@@ -18,26 +19,23 @@ export class AnnotationPdfViewerComponent implements OnInit {
   @Input() outputDmDocumentId: string;
   @Input() url = '';
   @Input() annotationSet: IAnnotationSet;
+  @Input() baseUrl: string;
   
   renderedPages: {};
   page: number;
-  tool: String;
+  tool: string;
 
   @ViewChild("contentWrapper") contentWrapper: ElementRef;
 
   constructor(private pdfService: PdfService,
-              private annotationStoreService: AnnotationStoreService,
               private npaService: NpaService,
+              private apiHttpService: ApiHttpService,
+              private annotationStoreService: AnnotationStoreService,
               @Inject(DOCUMENT) private document: any) {
   }
 
   ngOnInit() {
-    if (this.annotate) {
-      this.annotationStoreService.preLoad(this.annotationSet);
-      this.npaService.outputDmDocumentId.next(this.outputDmDocumentId);
-    } else {
-      this.annotationStoreService.preLoad(null);
-    }
+    this.loadAnnotations(this.annotate);
 
     this.pdfService.preRun();
     this.pdfService.setRenderOptions({
@@ -51,9 +49,17 @@ export class AnnotationPdfViewerComponent implements OnInit {
     this.pdfService.render();
     this.tool = 'cursor';
 
-    this.pdfService.getPageNumber().subscribe(
-      data => this.page = data
-    )
+    this.pdfService.getPageNumber().subscribe(page => this.page = page)
+  }
+
+  loadAnnotations(annotate: boolean) {
+    if (annotate) {
+      this.apiHttpService.baseUrl = this.baseUrl;
+      this.annotationStoreService.preLoad(this.annotationSet);
+      this.npaService.outputDmDocumentId.next(this.outputDmDocumentId);
+    } else {
+      this.annotationStoreService.preLoad(null);
+    }
   }
 
   getClickedPage(event) {

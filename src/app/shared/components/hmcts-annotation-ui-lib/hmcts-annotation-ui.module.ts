@@ -12,6 +12,7 @@ import { PdfService } from './data/pdf.service';
 import { AnnotationStoreService } from './data/annotation-store.service';
 import { AnnotationPdfViewerComponent } from './components/annotation-pdf-viewer/annotation-pdf-viewer.component';
 import { Utils } from './data/utils';
+import { ApiHttpService } from './data/api-http.service';
 
 @NgModule({
   imports: [
@@ -31,9 +32,15 @@ import { Utils } from './data/utils';
     AnnotationStoreService,
     PdfAdapter,
     NpaService,
+    ApiHttpService,
     Utils
   ],
   exports: [
+    CommentsComponent,
+    CommentItemComponent,
+    CommentFormComponent,
+    ToolbarComponent,
+    AnnotationPdfViewerComponent
   ]
 })
 export class HmctsAnnotationUiModule { }
