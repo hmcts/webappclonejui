@@ -73,7 +73,7 @@ const routes: Routes = [
                     {path: 'reject-reasons', component: ReasonsCoNotApprovedComponent},
                     {path: 'notes-for-court-administrator', component: NotesForCourtAdministratorComponent},
                     {path: 'draft-consent-order', component: DraftConsentOrderComponent},
-                    {path: 'app-hearing-details', component: HearingDetailsComponent},
+                    {path: 'hearing-details', component: HearingDetailsComponent},
                     {path: 'check', component: CheckDecisionComponent},
                     {path: 'confirm', component: DecisionConfirmationComponent}
                 ]
