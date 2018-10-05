@@ -162,9 +162,7 @@ module.exports = {
                             isPageHeading: false,
                             classes: 'govuk-fieldset__legend--m'
                         },
-                        hint: {
-                            text: 'You can use this to illustrate any detailed points or feedback for the parties.'
-                        },
+                        hint: { text: 'You can use this to illustrate any detailed points or feedback for the parties.' },
                         radios: {
                             control: 'includeAnnotatedVersionDraftConsOrder',
                             radioGroup: [

@@ -6,7 +6,6 @@ import { FormControl } from '@angular/forms';
 })
 export class FormsService {
     FormControls = [];
-    checked = null;
     constructor() { }
     create(someJson, someData) {
         if (typeof someJson === 'object') {
@@ -44,9 +43,10 @@ export class FormsService {
         }
     }
     defineformControls(someJson: any, someData: any): any {
-        console.log(someJson,someData);
+        console.log('Before= ',this.FormControls);
+        console.log(someJson, someData);
         this.create(someJson, someData);
-        console.log(this.FormControls);
+        console.log('After= ',this.FormControls);
 
         return this.FormControls;
     }
