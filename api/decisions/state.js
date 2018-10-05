@@ -4,6 +4,7 @@ const stateMeta = require('./state_meta');
 // The dummy "draft store" below
 let dummyFormDataStore = {};
 
+/* eslint-disable-next-line complexity */
 function handlePostState(req, res, responseJSON, theState) {
     const formValues = req.body.formValues;
     if (formValues) {
@@ -28,7 +29,20 @@ function handlePostState(req, res, responseJSON, theState) {
             responseJSON.newRoute = 'decision-confirmation';
             break;
         case 'reject-reasons':
-            responseJSON.newRoute = 'notes-for-court-administrator';
+            if (formValues.includeAnnotatedVersionDraftConsOrder === 'yes') {
+                responseJSON.newRoute = 'draft-consent-order';
+            } else if (formValues.partiesNeedAttend === true) {
+                responseJSON.newRoute = 'hearing-details';
+            } else {
+                responseJSON.newRoute = 'notes-for-court-administrator';
+            }
+            break;
+        case 'draft-consent-order':
+            if (formValues.partiesNeedAttend === true) {
+                responseJSON.newRoute = 'hearing-details';
+            } else {
+                responseJSON.newRoute = 'notes-for-court-administrator';
+            }
             break;
         default:
             break;
