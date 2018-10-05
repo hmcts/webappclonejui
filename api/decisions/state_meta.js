@@ -191,7 +191,19 @@ module.exports = {
         },
         'notes-for-court-administrator': {
             idPrefix: 'notes-for-court-administrator',
-            name: 'notes-for-court-administrator'
+            name: 'notes-for-court-administrator',
+            header: 'Notes for court administrator (optional)',
+            hint: 'This won’t be seen by the parties.',
+            textarea: {
+                label: 'Notes for court administrator',
+                control: 'notesForAdmin',
+                value: 'Notes for court administrator text'
+            },
+            button: {
+                control: 'createButton',
+                value: 'Continue',
+                onEvent: 'continue'
+            }
         },
         check: {
             idPrefix: 'check',
