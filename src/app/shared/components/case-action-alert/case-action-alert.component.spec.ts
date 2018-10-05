@@ -27,13 +27,4 @@ describe('CaseActionAlertComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have go to href', () => {
-      component.status = {
-          name: 'simple',
-          actionGoTo: 'index'
-      };
-
-      fixture.detectChanges();
-      expect(element.nativeElement.querySelector(Selector.selector('status')).textContent).toBe('simple');
-  });
 });
