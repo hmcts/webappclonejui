@@ -1,6 +1,6 @@
 import { Component, ViewChild, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Comment } from '../comment-model';
+import { Comment } from '../../../data/annotation-set.model';
 import { AnnotationStoreService } from '../../../data/annotation-store.service';
 
 @Component({
@@ -19,7 +19,14 @@ export class CommentFormComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.model = new Comment(null, null, new Date(), this.commentForm.value.comment, this.selectedAnnotationId, null, null);
+    this.model = new Comment(
+      null, 
+      this.selectedAnnotationId, 
+      null, 
+      null,
+      null,
+      new Date(),
+      this.commentForm.value.comment );
   }
 
   onSubmit() {
@@ -27,7 +34,8 @@ export class CommentFormComponent implements OnChanges {
       
     this.commentSubmitted.emit(this.model.annotationId);
     this.commentForm.reset();
-    this.model = new Comment(null, null, null, null, null, null, null);
+    this.model = new Comment(
+      null, null, null, null, null, null, null);
     this.selectedAnnotationId = null;
   }
 

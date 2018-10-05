@@ -9,7 +9,7 @@ import {ImgViewerComponent} from './viewers/img-viewer/img-viewer.component';
 import {ViewerAnchorDirective} from './viewers/viewer-anchor.directive';
 import {UrlFixerService} from './url-fixer.service';
 import {DocumentViewerService} from './document-viewer.service';
-import { AnnotationUiLibModule } from '../hmcts-annotation-ui-lib/annotation-ui-lib.module';
+import { HmctsAnnotationUiModule } from '../hmcts-annotation-ui-lib/hmcts-annotation-ui.module';
 import { AnnotationPdfViewerComponent } from '../hmcts-annotation-ui-lib/components/annotation-pdf-viewer/annotation-pdf-viewer.component';
 
 @NgModule({
@@ -29,7 +29,7 @@ import { AnnotationPdfViewerComponent } from '../hmcts-annotation-ui-lib/compone
         BrowserModule,
         FormsModule,
         HttpClientModule,
-        AnnotationUiLibModule
+        HmctsAnnotationUiModule
     ],
     providers: [
         ViewerFactoryService,

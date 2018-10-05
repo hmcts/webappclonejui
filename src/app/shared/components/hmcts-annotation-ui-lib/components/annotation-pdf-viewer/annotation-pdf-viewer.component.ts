@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { PdfService } from '../../data/pdf.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
 import { IAnnotationSet } from '../../data/annotation-set.model';
+import { NpaService } from '../../data/npa.service';
 
 @Component({
   selector: 'app-annotation-pdf-viewer',
@@ -16,6 +17,7 @@ export class AnnotationPdfViewerComponent implements OnInit {
   renderedPages: {};
   page: number;
   dmDocumentId: string;
+  outputDmDocumentId: string;
   url = '';
   tool: String;
   annotationSet: IAnnotationSet;
@@ -24,18 +26,19 @@ export class AnnotationPdfViewerComponent implements OnInit {
 
   constructor(private pdfService: PdfService,
               private annotationStoreService: AnnotationStoreService,
+              private npaService: NpaService,
               @Inject(DOCUMENT) private document: any) {
   }
 
   ngOnInit() {
     if (this.annotate) {
       this.annotationStoreService.preLoad(this.annotationSet);
+      this.npaService.outputDmDocumentId.next(this.outputDmDocumentId);
     } else {
       this.annotationStoreService.preLoad(null);
     }
 
     this.pdfService.preRun();
-
     this.pdfService.setRenderOptions({
       documentId: this.url,
       pdfDocument: null,

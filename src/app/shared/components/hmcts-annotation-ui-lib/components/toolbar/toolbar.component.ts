@@ -16,6 +16,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @ViewChild("pointerTool") pointerPool: ElementRef;
 
   @Input() dmDocumentId: string;
+  outputDocumentId: string;
   @Input() tool: string;
   @Output() toolChange: EventEmitter<string> = new EventEmitter<string>();
 
@@ -26,6 +27,9 @@ export class ToolbarComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.handlePointerClick();
+    this.npaService.outputDmDocumentId.subscribe(
+      outputDocumentId => this.outputDocumentId = outputDocumentId
+    )
   }
 
   ngOnChanges() {
@@ -55,7 +59,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   }
 
   onExportClick() {
-    this.npaService.exportPdf(this.dmDocumentId).subscribe(
+    this.npaService.exportPdf(this.dmDocumentId, this.outputDocumentId).subscribe(
     (res: HttpResponse<IDocumentTask>) => this.npaService.documentTask.next(res.body),
     (res: HttpErrorResponse) => this.npaService.documentTask = res.error
     );

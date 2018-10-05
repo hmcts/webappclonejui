@@ -42,6 +42,7 @@ export class ViewerFactoryService {
         componentRef.instance.annotate = annotate;
         componentRef.instance.annotationSet = annotationSet;
         componentRef.instance.dmDocumentId = ViewerFactoryService.getDocumentId(documentMetaData);
+        componentRef.instance.outputDmDocumentId = null; // '4fbdde23-e9a7-4843-b6c0-24d5bf2140ab';
         componentRef.instance.url = this.urlFixer.fixDm(documentMetaData._links.binary.href, baseUrl);
 
         return componentRef.instance;
@@ -56,13 +57,11 @@ export class ViewerFactoryService {
         annotate = true;
         
         if (ViewerFactoryService.isPdf(documentMetaData.mimeType) && annotate) {
-            // this.npaService.documentTask.subscribe(
-            //     documentTask => {
-            //         console.log("In viewer factory");
-            //         console.log(documentTask)
-            //     });
+            this.npaService.documentTask.subscribe(
+                documentTask => {
+                    console.log(documentTask)
+                });
                 
-            this.npaService.outputDmDocumentId = null;
             const dmDocumentId = ViewerFactoryService.getDocumentId(documentMetaData);
 
             this.annotationStoreService.fetchData(dmDocumentId).subscribe((response) => {
