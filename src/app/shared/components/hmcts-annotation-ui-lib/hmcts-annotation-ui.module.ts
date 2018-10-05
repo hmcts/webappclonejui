@@ -36,4 +36,4 @@ import { Utils } from './data/utils';
   exports: [
   ]
 })
-export class AnnotationUiLibModule { }
+export class HmctsAnnotationUiModule { }

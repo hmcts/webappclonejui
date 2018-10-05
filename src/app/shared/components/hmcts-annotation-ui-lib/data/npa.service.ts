@@ -9,17 +9,19 @@ import {Observable, Subject} from "rxjs";
 export class NpaService {
 
     documentTask: Subject<IDocumentTask>;
-    outputDmDocumentId: string;
+    outputDmDocumentId: Subject<string>;
     
     constructor(private configService: ConfigService,
                 private httpClient: HttpClient) {
+        this.outputDmDocumentId = new Subject<string>();
         this.documentTask = new Subject<IDocumentTask>();
     }
 
-    exportPdf(dmDocumentId): Observable<HttpResponse<IDocumentTask>> {
+    exportPdf(dmDocumentId, outputDmDocumentId): Observable<HttpResponse<IDocumentTask>> {
         const url = `${this.configService.config.api_base_url}/api/em-npa/document-tasks`;
         const documentTasks = {
-            inputDocumentId: dmDocumentId
+            inputDocumentId: dmDocumentId,
+            outputDocumentId: outputDmDocumentId
         };
         return this.httpClient.post<IDocumentTask>(url, documentTasks, { observe: 'response' });
     }

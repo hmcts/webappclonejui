@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { PdfService } from '../../data/pdf.service';
 import { AnnotationStoreService } from '../../data/annotation-store.service';
 import { IAnnotationSet } from '../../data/annotation-set.model';
+import { NpaService } from '../../data/npa.service';
 
 @Component({
   selector: 'app-annotation-pdf-viewer',
@@ -12,30 +13,33 @@ import { IAnnotationSet } from '../../data/annotation-set.model';
 })
 export class AnnotationPdfViewerComponent implements OnInit {
 
-  annotate: boolean;
+  @Input() annotate: boolean;
+  @Input() dmDocumentId: string;
+  @Input() outputDmDocumentId: string;
+  @Input() url = '';
+  @Input() annotationSet: IAnnotationSet;
+  
   renderedPages: {};
   page: number;
-  dmDocumentId: string;
-  url = '';
   tool: String;
-  annotationSet: IAnnotationSet;
 
   @ViewChild("contentWrapper") contentWrapper: ElementRef;
 
   constructor(private pdfService: PdfService,
               private annotationStoreService: AnnotationStoreService,
+              private npaService: NpaService,
               @Inject(DOCUMENT) private document: any) {
   }
 
   ngOnInit() {
     if (this.annotate) {
       this.annotationStoreService.preLoad(this.annotationSet);
+      this.npaService.outputDmDocumentId.next(this.outputDmDocumentId);
     } else {
       this.annotationStoreService.preLoad(null);
     }
 
     this.pdfService.preRun();
-
     this.pdfService.setRenderOptions({
       documentId: this.url,
       pdfDocument: null,

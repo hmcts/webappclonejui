@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Comment } from '../comment-model';
+import { Comment } from '../../../data/annotation-set.model';
 import { AnnotationStoreService } from '../../../data/annotation-store.service';
 
 @Component({
@@ -55,12 +55,12 @@ export class CommentItemComponent implements OnInit {
   convertFormToComment(commentForm: NgForm) {
     return new Comment(
       commentForm.value.commentId, 
-      commentForm.value.createdBy, 
+      commentForm.value.annotationId, 
       null,
-      commentForm.value.content, 
-      commentForm.value.annotationId,
       null,
-      null
+      null,
+      null,
+      commentForm.value.content
     );
   }
 
