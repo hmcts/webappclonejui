@@ -78,7 +78,7 @@
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
     "rxjs": "^6.2.2",
-    "rxjs-compat": "^6.1.0",
+    "rxjs-compat": "^6.6.3",
     "stable": "^0.1.8",
     "ts-loader": "^4.0.1",
     "udk": "^0.3.12",
