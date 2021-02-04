@@ -77,7 +77,7 @@
     "pdfjs-dist": "1.9.661",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
-    "rxjs": "^6.2.2",
+    "rxjs": "^6.6.3",
     "rxjs-compat": "^6.1.0",
     "stable": "^0.1.8",
     "ts-loader": "^4.0.1",
